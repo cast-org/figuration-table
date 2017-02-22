@@ -20,134 +20,266 @@
 <body>
 
 <div class="container">
-    <h1>Figuration Table : Demo</h1>
 
-    <h2>Editable and Sortable</h2>
-    <div class="table-responsive">
-        <table id="ex0" class="table table-bordered table-condensed" data-cfw="table" data-cfw-table-editable="true" data-cfw-table-sortable="true">
-            <thead>
-                <tr>
-                    <th>A</th>
-                    <th>B</th>
-                    <th>C</th>
-                    <th>D</th>
-                    <th>E</th>
-                    <th>F</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>alpha uno</td>
-                    <td>beta uno</td>
-                    <td>gamma uno</td>
-                    <td>delta uno</td>
-                    <td>epsilon uno</td>
-                    <td>123</td>
-                </tr>
-                <tr>
-                    <td>alpha dos</td>
-                    <td>beta dos</td>
-                    <td>gamma dos</td>
-                    <td>delta dos</td>
-                    <td>epsilon dos</td>
-                    <td>456</td>
-                </tr>
-                <tr>
-                    <td>alpha tres</td>
-                    <td>beta tres</td>
-                    <td>gamma tres</td>
-                    <td>delta tres</td>
-                    <td>epsilon tres</td>
-                    <td>789</td>
-                </tr>
-                <tr>
-                    <td>alpha quatro</td>
-                    <td>beta quatro</td>
-                    <td>gamma quatro</td>
-                    <td>delta quatro</td>
-                    <td>epsilon quatro</td>
-                    <td>012</td>
-                </tr>
-                <tr>
-                    <td>alpha cinco</td>
-                    <td>beta cinco</td>
-                    <td>gamma cinco</td>
-                    <td>delta cinco</td>
-                    <td>epsilon cinco</td>
-                    <td>345</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+<h1>Figuration Table : Demo</h1>
 
-    <div>
-        <button type="button" onclick="$('#ex0').CFW_Table('insertRow'); return false;">Row: Insert</button>
-        <button type="button" class="mr-1" onclick="$('#ex0').CFW_Table('deleteRow'); return false;">Row: Delete</button>
+<h2 class="mb-1">Examples</h2>
 
-        <button type="button" onclick="$('#ex0').CFW_Table('appendCol'); return false;">Column: Append</button>
-        <button type="button" class="mr-1" onclick="$('#ex0').CFW_Table('removeCol'); return false;">Column: Remove</button>
-    </div>
-
-    <hr />
-
-    <h2>Static Table</h2>
-    <div class="table-responsive">
-        <table id="ex1" class="table table-bordered table-condensed" data-cfw="table">
-            <thead>
-                <tr>
-                    <th>A</th>
-                    <th>B</th>
-                    <th>C</th>
-                    <th>D</th>
-                    <th>E</th>
-                    <th>F</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>alpha uno</td>
-                    <td>beta uno</td>
-                    <td>gamma uno</td>
-                    <td>delta uno</td>
-                    <td>epsilon uno</td>
-                    <td>123</td>
-                </tr>
-                <tr>
-                    <td>alpha dos</td>
-                    <td>beta dos</td>
-                    <td>gamma dos</td>
-                    <td>delta dos</td>
-                    <td>epsilon dos</td>
-                    <td>456</td>
-                </tr>
-                <tr>
-                    <td>alpha tres</td>
-                    <td>beta tres</td>
-                    <td>gamma tres</td>
-                    <td>delta tres</td>
-                    <td>epsilon tres</td>
-                    <td>789</td>
-                </tr>
-                <tr>
-                    <td>alpha quatro</td>
-                    <td>beta quatro</td>
-                    <td>gamma quatro</td>
-                    <td>delta quatro</td>
-                    <td>epsilon quatro</td>
-                    <td>012</td>
-                </tr>
-                <tr>
-                    <td>alpha cinco</td>
-                    <td>beta cinco</td>
-                    <td>gamma cinco</td>
-                    <td>delta cinco</td>
-                    <td>epsilon cinco</td>
-                    <td>345</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+<h3>Editable and Sortable</h3>
+<div class="table-responsive">
+    <table id="ex0" class="table table-bordered table-condensed" data-cfw="table" data-cfw-table-editable="true" data-cfw-table-sortable="true">
+        <thead>
+            <tr>
+                <th>A</th>
+                <th>B</th>
+                <th>C</th>
+                <th>D</th>
+                <th>E</th>
+                <th>F</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>alpha uno</td>
+                <td>beta uno</td>
+                <td>gamma uno</td>
+                <td>delta uno</td>
+                <td>epsilon uno</td>
+                <td>123</td>
+            </tr>
+            <tr>
+                <td>alpha dos</td>
+                <td>beta dos</td>
+                <td>gamma dos</td>
+                <td>delta dos</td>
+                <td>epsilon dos</td>
+                <td>456</td>
+            </tr>
+            <tr>
+                <td>alpha tres</td>
+                <td>beta tres</td>
+                <td>gamma tres</td>
+                <td>delta tres</td>
+                <td>epsilon tres</td>
+                <td>789</td>
+            </tr>
+            <tr>
+                <td>alpha quatro</td>
+                <td>beta quatro</td>
+                <td>gamma quatro</td>
+                <td>delta quatro</td>
+                <td>epsilon quatro</td>
+                <td>012</td>
+            </tr>
+            <tr>
+                <td>alpha cinco</td>
+                <td>beta cinco</td>
+                <td>gamma cinco</td>
+                <td>delta cinco</td>
+                <td>epsilon cinco</td>
+                <td>345</td>
+            </tr>
+        </tbody>
+    </table>
 </div>
+
+<div class="mb-0_5">
+    <button type="button" onclick="$('#ex0').CFW_Table('insertRow'); return false;">Row: Insert</button>
+    <button type="button" class="mr-1" onclick="$('#ex0').CFW_Table('deleteRow'); return false;">Row: Delete</button>
+
+    <button type="button" onclick="$('#ex0').CFW_Table('appendCol'); return false;">Column: Append</button>
+    <button type="button" class="mr-1" onclick="$('#ex0').CFW_Table('removeCol'); return false;">Column: Remove</button>
+</div>
+<div>
+    <button type="button" onclick="$('#ex0').CFW_Table('sortEnable'); return false;">Sort: Enable</button>
+    <button type="button" class="mr-1" onclick="$('#ex0').CFW_Table('sortDisable'); return false;">Sort: Disable</button>
+
+    <button type="button" onclick="$('#ex0').CFW_Table('editEnable'); return false;">Edit: Enable</button>
+    <button type="button" class="mr-1" onclick="$('#ex0').CFW_Table('editDisable'); return false;">Edit: Disable</button>
+
+    <button type="button" onclick="$('#ex0').CFW_Table('colEditEnable'); return false;">ColEdit: Enable</button>
+    <button type="button" class="mr-1" onclick="$('#ex0').CFW_Table('colEditDisable'); return false;">ColEdit: Disable</button>
+</div>
+
+<hr />
+
+<h3>Static Table</h3>
+<div class="table-responsive">
+    <table id="exS" class="table table-bordered table-condensed" data-cfw="table">
+        <thead>
+            <tr>
+                <th>A</th>
+                <th>B</th>
+                <th>C</th>
+                <th>D</th>
+                <th>E</th>
+                <th>F</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>alpha uno</td>
+                <td>beta uno</td>
+                <td>gamma uno</td>
+                <td>delta uno</td>
+                <td>epsilon uno</td>
+                <td>123</td>
+            </tr>
+            <tr>
+                <td>alpha dos</td>
+                <td>beta dos</td>
+                <td>gamma dos</td>
+                <td>delta dos</td>
+                <td>epsilon dos</td>
+                <td>456</td>
+            </tr>
+            <tr>
+                <td>alpha tres</td>
+                <td>beta tres</td>
+                <td>gamma tres</td>
+                <td>delta tres</td>
+                <td>epsilon tres</td>
+                <td>789</td>
+            </tr>
+            <tr>
+                <td>alpha quatro</td>
+                <td>beta quatro</td>
+                <td>gamma quatro</td>
+                <td>delta quatro</td>
+                <td>epsilon quatro</td>
+                <td>012</td>
+            </tr>
+            <tr>
+                <td>alpha cinco</td>
+                <td>beta cinco</td>
+                <td>gamma cinco</td>
+                <td>delta cinco</td>
+                <td>epsilon cinco</td>
+                <td>345</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<hr />
+
+<h2>Usage</h2>
+
+<h3>Options</h3>
+<div class="table-responsive">
+    <table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th style="width: 100px;">Name</th>
+            <th style="width: 50px;">Type</th>
+            <th style="width: 50px;">Default</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>sortable</td>
+            <td>boolean</td>
+            <td>false</td>
+            <td>Initialize with sorting. (Not compatible with coledit and will override the coledit option.)</td>
+        </tr>
+        <tr>
+            <td>editable</td>
+            <td>boolean</td>
+            <td>false</td>
+            <td>Initialize with cell editing</td>
+        </tr>
+        <tr>
+            <td>coledit</td>
+            <td>boolean</td>
+            <td>false</td>
+            <td>Initialize with header cell editing. (Not compatible with sortable.)</td>
+        </tr>
+    </tbody>
+    </table>
+</div>
+
+<h3>Methods</h3>
+<div class="table-responsive">
+    <table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th style="width: 150px;">Method</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>CFW_Table('insertRow', [index])</td>
+            <td>Insert a new row into <code>tbody</code> at the bottom. <code>index</code> is the optional row index insert location within the <code>tbody</code>.</td>
+        </tr>
+        <tr>
+            <td>CFW_Table('deleteRow', [index])</td>
+            <td>Remove a row from <code>tbody</code> at the bottom. <code>index</code> is the optional row index within the <code>tbody</code> to be removed.</td>
+        </tr>
+        <tr>
+            <td>CFW_Table('appendCol', [index])</td>
+            <td>Insert a new column into <code>table</code> at the right. <code>index</code> is the optional column index insert location within the <code>table</code>.</td>
+        </tr>
+        <tr>
+            <td>CFW_Table('removeCol', [index])</td>
+            <td>Remove a column from <code>table</code> at the right. <code>index</code> is the optional column index within the <code>table</code> to be removed.</td>
+        </tr>
+        <tr>
+            <td>CFW_Table('editEnable')</td>
+            <td>Enable cell editing.</td>
+        </tr>
+        <tr>
+            <td>CFW_Table('editDisable')</td>
+            <td>Disable cell editing.</td>
+        </tr>
+        <tr>
+            <td>CFW_Table('sortEnable')</td>
+            <td>Enable column sorting. (Will disable column header editing.)</td>
+        </tr>
+        <tr>
+            <td>CFW_Table('sortDisable')</td>
+            <td>Disable column sorting.</td>
+        </tr>
+        <tr>
+            <td>CFW_Table('colEditEnable')</td>
+            <td>Enable column header editing. (Will disable sorting.)</td>
+        </tr>
+        <tr>
+            <td>CFW_Table('colEditDisable')</td>
+            <td>Disable column header editing.</td>
+        </tr>
+        <tr>
+            <td>CFW_Table('dispose')</td>
+            <td>Disable functionality, remove event listeners and data.</td>
+        </tr>
+    </tbody>
+    </table>
+</div>
+
+<h3>Events</h3>
+<div class="table-responsive">
+    <table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th style="width: 150px;">Event Type</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>init.cfw.table</td>
+            <td>Initialization complete.</td>
+        </tr>
+        <tr>
+            <td>change.cfw.table</td>
+            <td>Fires when content of a table cell changes.</td>
+        </tr>
+    </tbody>
+    </table>
+</div>
+
+</div> <!-- /.container -->
 
 </body>
 </html>
