@@ -1,0 +1,66 @@
+/*!
+ * Figuration Table (v0.0.1)
+ * http://figuration.org
+ * Copyright 2017 CAST, Inc.
+ * Licensed under MIT (https://github.com/cast-org/figuration-table/blob/master/LICENSE)
+ */
+.figuration-table {
+  empty-cells: show;
+}
+
+.figuration-table td {
+  height: calc(1.5rem + 0.75rem + 0.75rem);
+}
+
+.figuration-table.table-condensed td {
+  height: calc(1.5rem + 0.3125rem + 0.3125rem);
+}
+
+.figuration-table.editable td {
+  position: relative;
+}
+
+.figuration-table.editable td:focus {
+  z-index: 2;
+  -webkit-box-shadow: inset 0px 0px 0.125rem 0.1875rem #4d90fe;
+          box-shadow: inset 0px 0px 0.125rem 0.1875rem #4d90fe;
+  outline: 0;
+}
+
+.figuration-table.sortable th {
+  position: relative;
+  padding-right: calc(1rem + 0.75rem);
+}
+
+.figuration-table.sortable th:focus {
+  z-index: 2;
+  -webkit-box-shadow: inset 0px 0px 0.125rem 0.1875rem #4d90fe;
+          box-shadow: inset 0px 0px 0.125rem 0.1875rem #4d90fe;
+  outline: 0;
+}
+
+.figuration-table.sortable.table-condensed th {
+  padding-right: calc(1rem + 0.5rem);
+}
+
+.figuration-table.sortable .sort-ascending {
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3E%3Cpath fill='%23000' d='M2 0v6h-2l2.5 2 2.5-2h-2v-6h-1zm2 0v1h2v-1h-2zm0 2v1h3v-1h-3zm0 2v1h4v-1h-4z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center right 0.5rem;
+  -webkit-background-size: 1rem 1rem;
+          background-size: 1rem 1rem;
+}
+
+.figuration-table.sortable .sort-descending {
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3E%3Cpath fill='%23000' d='M2 0v6h-2l2.5 2 2.5-2h-2v-6h-1zm2 0v1h4v-1h-4zm0 2v1h3v-1h-3zm0 2v1h2v-1h-2z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center right 0.5rem;
+  -webkit-background-size: 1rem 1rem;
+          background-size: 1rem 1rem;
+}
+
+.figuration-table-editor {
+  position: absolute;
+  border: 0;
+}
+/*# sourceMappingURL=figuration-table.css.map */

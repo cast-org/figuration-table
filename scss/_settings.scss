@@ -1,0 +1,24 @@
+// Default settings
+//
+// Copy settings from this file into the provided `_custom.scss` to override the defaults.
+// This allows for customization without changing core files.
+
+
+// Options
+// =====
+// Quickly modify global styling by enabling or disabling optional features.
+$table-enable-focus-ring:   true !default;
+
+
+// Focus Indicator
+// =====
+$table-focus-outline:           2px auto rgb(77, 144, 254) !default;
+$table-focus-outline-offset:    -2px !default;
+$table-focus-ring-shadow:       inset 0px 0px .125rem .1875rem rgb(77, 144, 254) !default;
+
+// Sort Icons
+// =====
+$table-sort-icon-color: #000 !default;
+$table-sort-icon-width: 1rem !default;
+$table-sort-icon-asc:   str-replace(url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3E%3Cpath fill='#{$table-sort-icon-color}' d='M2 0v6h-2l2.5 2 2.5-2h-2v-6h-1zm2 0v1h2v-1h-2zm0 2v1h3v-1h-3zm0 2v1h4v-1h-4z'/%3E%3C/svg%3E"), "#", "%23") !default;
+$table-sort-icon-desc:  str-replace(url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3E%3Cpath fill='#{$table-sort-icon-color}' d='M2 0v6h-2l2.5 2 2.5-2h-2v-6h-1zm2 0v1h4v-1h-4zm0 2v1h3v-1h-3zm0 2v1h2v-1h-2z'/%3E%3C/svg%3E"), "#", "%23") !default;

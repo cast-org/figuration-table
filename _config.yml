@@ -1,0 +1,46 @@
+# Dependencies
+markdown:         kramdown
+highlighter:      rouge
+
+kramdown:
+  auto_ids: true
+
+# Permalinks
+permalink:        pretty
+
+# Server
+source:           docs
+destination:      _gh_pages
+host:             0.0.0.0
+port:             9001
+baseurl:          ""
+url:              http://figuration.org
+encoding:         UTF-8
+exclude:          [assets/scss/]
+
+gems:
+  - jekyll-redirect-from
+  - jekyll-sitemap
+
+# Custom vars
+current_version:  2.0.0
+repo:             https://github.com/cast-org/figuration
+changelog:        https://github.com/cast-org/figuration/releases/tag/v2.0.0
+
+# Downloads
+download:
+  source:         https://github.com/cast-org/figuration/archive/v2.0.0.zip
+  dist:           https://github.com/cast-org/figuration/releases/download/v2.0.0/figuration-2.0.0-dist.zip
+
+
+# CDN settings
+# See https://www.srihash.org for info on how to generate the hashes
+cdn:
+  css:          https://cdn.jsdelivr.net/figuration/2.0.0/css/figuration.min.css
+  css_hash:     "sha384-4NEYqGqlkFmjCXappSYTanA6sCbHfuAbTw0y9/n3iEx6JVK5TzYEVyQWroUSR3vo"
+  js:           https://cdn.jsdelivr.net/figuration/2.0.0/js/figuration.min.js
+  js_hash:      "sha384-CYqCLcTJYBDbNhvb4Y5FSqooQB6ZZZUBboJ2YkdFnNrf5BLWOy1WsKdaiSpOAZf/"
+  jquery:       https://code.jquery.com/jquery-3.1.1.min.js
+  jquery_hash:  "sha384-3ceskX3iaEnIogmQchP8opvBy3Mi7Ce34nWjpBIwVTHfGYWQS9jwHDVRnpKKHJg7"
+  fontawe:      https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css
+  fontawe_hash: "sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN"

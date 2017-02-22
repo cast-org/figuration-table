@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+<!-- Required meta tags always come first -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+<title>Figuration Table : Demo</title>
+
+<!-- Figuration CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/figuration/2.0.0/css/figuration.min.css" integrity="sha384-4NEYqGqlkFmjCXappSYTanA6sCbHfuAbTw0y9/n3iEx6JVK5TzYEVyQWroUSR3vo" crossorigin="anonymous">
+<link rel="stylesheet" href="../dist/css/figuration-table.css">
+
+<!-- jQuery and Figuration JS -->
+<script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha384-3ceskX3iaEnIogmQchP8opvBy3Mi7Ce34nWjpBIwVTHfGYWQS9jwHDVRnpKKHJg7" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/figuration/2.0.0/js/figuration.min.js" integrity="sha384-CYqCLcTJYBDbNhvb4Y5FSqooQB6ZZZUBboJ2YkdFnNrf5BLWOy1WsKdaiSpOAZf/" crossorigin="anonymous"></script>
+<script src="../js/util.js"></script>
+<script src="../js/figuration-table.js"></script>
+</head>
+<body>
+
+<div class="container">
+    <h1>Figuration Table : Demo</h1>
+
+    <h2>Editable and Sortable</h2>
+    <div class="table-responsive">
+        <table id="ex0" class="table table-bordered table-condensed" data-cfw="table" data-cfw-table-editable="true" data-cfw-table-sortable="true">
+            <thead>
+                <tr>
+                    <th>A</th>
+                    <th>B</th>
+                    <th>C</th>
+                    <th>D</th>
+                    <th>E</th>
+                    <th>F</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>alpha uno</td>
+                    <td>beta uno</td>
+                    <td>gamma uno</td>
+                    <td>delta uno</td>
+                    <td>epsilon uno</td>
+                    <td>123</td>
+                </tr>
+                <tr>
+                    <td>alpha dos</td>
+                    <td>beta dos</td>
+                    <td>gamma dos</td>
+                    <td>delta dos</td>
+                    <td>epsilon dos</td>
+                    <td>456</td>
+                </tr>
+                <tr>
+                    <td>alpha tres</td>
+                    <td>beta tres</td>
+                    <td>gamma tres</td>
+                    <td>delta tres</td>
+                    <td>epsilon tres</td>
+                    <td>789</td>
+                </tr>
+                <tr>
+                    <td>alpha quatro</td>
+                    <td>beta quatro</td>
+                    <td>gamma quatro</td>
+                    <td>delta quatro</td>
+                    <td>epsilon quatro</td>
+                    <td>012</td>
+                </tr>
+                <tr>
+                    <td>alpha cinco</td>
+                    <td>beta cinco</td>
+                    <td>gamma cinco</td>
+                    <td>delta cinco</td>
+                    <td>epsilon cinco</td>
+                    <td>345</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div>
+        <button type="button" onclick="$('#ex0').CFW_Table('insertRow'); return false;">Row: Insert</button>
+        <button type="button" class="mr-1" onclick="$('#ex0').CFW_Table('deleteRow'); return false;">Row: Delete</button>
+
+        <button type="button" onclick="$('#ex0').CFW_Table('appendCol'); return false;">Column: Append</button>
+        <button type="button" class="mr-1" onclick="$('#ex0').CFW_Table('removeCol'); return false;">Column: Remove</button>
+    </div>
+
+    <hr />
+
+    <h2>Static Table</h2>
+    <div class="table-responsive">
+        <table id="ex1" class="table table-bordered table-condensed" data-cfw="table">
+            <thead>
+                <tr>
+                    <th>A</th>
+                    <th>B</th>
+                    <th>C</th>
+                    <th>D</th>
+                    <th>E</th>
+                    <th>F</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>alpha uno</td>
+                    <td>beta uno</td>
+                    <td>gamma uno</td>
+                    <td>delta uno</td>
+                    <td>epsilon uno</td>
+                    <td>123</td>
+                </tr>
+                <tr>
+                    <td>alpha dos</td>
+                    <td>beta dos</td>
+                    <td>gamma dos</td>
+                    <td>delta dos</td>
+                    <td>epsilon dos</td>
+                    <td>456</td>
+                </tr>
+                <tr>
+                    <td>alpha tres</td>
+                    <td>beta tres</td>
+                    <td>gamma tres</td>
+                    <td>delta tres</td>
+                    <td>epsilon tres</td>
+                    <td>789</td>
+                </tr>
+                <tr>
+                    <td>alpha quatro</td>
+                    <td>beta quatro</td>
+                    <td>gamma quatro</td>
+                    <td>delta quatro</td>
+                    <td>epsilon quatro</td>
+                    <td>012</td>
+                </tr>
+                <tr>
+                    <td>alpha cinco</td>
+                    <td>beta cinco</td>
+                    <td>gamma cinco</td>
+                    <td>delta cinco</td>
+                    <td>epsilon cinco</td>
+                    <td>345</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+</body>
+</html>

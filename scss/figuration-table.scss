@@ -1,0 +1,106 @@
+/*!
+ * Figuration Table (v0.0.1)
+ * http://figuration.org
+ * Copyright 2017 CAST, Inc.
+ * Licensed under MIT (https://github.com/cast-org/figuration-table/blob/master/LICENSE)
+ */
+
+// Figuration Items
+@import "../node_modules/figuration/scss/functions";
+@import "../node_modules/figuration/scss/settings";
+@import "../node_modules/figuration/scss/mixins";
+@import "../node_modules/figuration/scss/custom";
+
+// =====
+
+// Figuration Table Items
+@import "functions";
+@import "settings";
+@import "custom";
+
+// Expand padding rules (messy but works)
+$padN: mapPadding($table-cell-padding);
+$padC: mapPadding($table-condensed-cell-padding);
+
+// Basic table settings
+.figuration-table {
+    empty-cells: show;
+}
+
+// Minimum cell height
+.figuration-table {
+    td {
+        height: calc(#{($line-height-base * $font-size-base)} + #{map-get($padN, "top")} + #{map-get($padN, "bottom")});
+    }
+
+    &.table-condensed {
+        td {
+            height: calc(#{($line-height-base * $font-size-base)} + #{map-get($padC, "top")} + #{map-get($padC, "bottom")});
+        }
+    }
+}
+
+// Editable - enable focus indicator
+.figuration-table.editable {
+    td {
+        position: relative;
+
+        &:focus {
+            z-index: 2;
+            @if $table-enable-focus-ring {
+                box-shadow: $table-focus-ring-shadow;
+                outline: 0;
+            } @else {
+                outline: $table-focus-outline;
+                outline-offset: $table-focus-outline-offset;
+            }
+        }
+    }
+}
+
+// Sortable - reserve padding for sort icons
+.figuration-table.sortable {
+    th {
+        position: relative;
+        padding-right: calc(#{$table-sort-icon-width} + #{map-get($padN, "right")});
+
+        &:focus {
+            z-index: 2;
+            @if $table-enable-focus-ring {
+                box-shadow: $table-focus-ring-shadow;
+                outline: 0;
+            } @else {
+                outline: $table-focus-outline;
+                outline-offset: $table-focus-outline-offset;
+            }
+        }
+    }
+
+    &.table-condensed {
+        th {
+            padding-right: calc(#{$table-sort-icon-width} + #{map-get($padC, "right")});
+        }
+    }
+
+    .sort-ascending {
+        background-image: $table-sort-icon-asc;
+        background-repeat: no-repeat;
+        background-position: center right ($input-height / 4);
+        background-size: ($input-height / 2) ($input-height / 2);
+    }
+
+    .sort-descending {
+        background-image: $table-sort-icon-desc;
+        background-repeat: no-repeat;
+        background-position: center right ($input-height / 4);
+        background-size: ($input-height / 2) ($input-height / 2);
+    }
+}
+
+// Editor input item
+// (1) Some shorthand property cloning bugs with Firefox
+// https://bugzilla.mozilla.org/show_bug.cgi?id=137688
+.figuration-table-editor {
+    position: absolute;
+    border: 0; // 1
+}

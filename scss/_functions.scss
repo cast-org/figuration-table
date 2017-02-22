@@ -1,0 +1,58 @@
+// https://gist.github.com/danielpchen/3677421ea15dcf2579ff
+// @function explode() -- split a string into a list of strings
+//  {string} $string: the string to be split
+//  {string} $delimiter: the boundary string
+//  @return {list} the result list
+@function explode($string, $delimiter) {
+	$result: ();
+	@if $delimiter == "" {
+		@for $i from 1 through str-length($string) {
+			$result: append($result, str-slice($string, $i, $i));
+		}
+		@return $result;
+	}
+	$exploding: true;
+	@while $exploding {
+		$d-index: str-index($string, $delimiter);
+		@if $d-index {
+			@if $d-index > 1 {
+				$result: append($result, str-slice($string, 1, $d-index - 1));
+				$string: str-slice($string, $d-index + str-length($delimiter));
+			} @else if $d-index == 1 {
+				$string: str-slice($string, 1, $d-index + str-length($delimiter));
+			} @else {
+				$result: append($result, $string);
+				$exploding: false;
+			}
+		} @else {
+			$result: append($result, $string);
+			$exploding: false;
+		}
+	}
+	@return $result;
+}
+
+@function mapPadding($string) {
+    // Force casting to string with inspect
+    $list: explode(inspect($string), ' ');
+    $len: length($list);
+
+    $T: nth($list, 1);
+    $R: nth($list, 1);
+    $B: nth($list, 1);
+    $L: nth($list, 1);
+
+    @if $len >= 2 { $R: nth($list, 2); }
+    @if $len >= 2 { $L: nth($list, 2); }
+    @if $len >= 3 { $B: nth($list, 3); }
+    @if $len >= 4 { $L: nth($list, 4); }
+
+    $result: (
+        "top": $T,
+        "right": $R,
+        "bottom": $B,
+        "left": $L
+    );
+
+    @return $result;
+}
