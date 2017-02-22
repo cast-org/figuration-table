@@ -244,11 +244,6 @@
                 /* Up    */ case 38: { return $prevRow.children().eq($node.index()); }
                 /* Right */ case 39: { return $node.next(selectorCells); }
                 /* Down  */ case 40: { return $nextRow.children().eq($node.index()); }
-
-                // /* Left  */ case 37: { return $node.prev(selectorCells); }
-                // /* Up    */ case 38: { return $node.parent().prev().children().eq($node.index()); }
-                // /* Right */ case 39: { return $node.next(selectorCells); }
-                // /* Down  */ case 40: { return $node.parent().next().children().eq($node.index()); }
             }
         },
 
@@ -358,11 +353,13 @@
             this._updateCells();
         },
 
-        // Borrows and modified from:
+        // Borrowed and modified from:
         // http://stackoverflow.com/a/19947532
         // http://jsfiddle.net/Zhd2X/20/
-        _sortSimple : function(index) {
+        _sortSimple : function(index, asc) {
             if (!this.settings.sortable) { return; }
+
+            if (asc === undefined) { asc = true; }
 
             function getCellValue(row, index) {
                 return $(row).children('td').eq(index).html();
@@ -378,12 +375,9 @@
 
             this.$sorter = this.$element.find(this.selectors.headCols).eq(index);
             var $rows = this.$element.find(this.selectors.bodyRows);
-            var asc = this.$sorter.data('cfw.table.sortOrder');
-
-            if (typeof asc !== undefined) {
-                asc = !asc;
-            } else {
-                asc = true;
+            var ascData = this.$sorter.data('cfw.table.sortOrder');
+            if (typeof ascData !== undefined) {
+                asc = !ascData;
             }
 
             this.$sorter.data('cfw.table.sortOrder', asc);
@@ -425,6 +419,7 @@
 
         _sortEnable : function() {
             var $selfRef = this;
+            this.settings.sortable = true;
             this.$element
                 .on('click.cfw.table', this.selectors.headCols, function(e) {
                     var index = $(e.target).index();
@@ -453,6 +448,7 @@
         },
 
         _sortDisable : function() {
+            this.settings.sortable = false;
             this.$element
                 .off('click.cfw.table', this.selectors.headCols)
                 .removeClass('sortable');
