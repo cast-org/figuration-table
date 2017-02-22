@@ -18,3 +18,6 @@ Features:
 
 Requirements:
 - Tables must use `<thead>` and `<tbody>` elements.
+
+Demo:
+[https://cast-org.github.io/figuration-table/demo/](https://cast-org.github.io/figuration-table/demo/)
