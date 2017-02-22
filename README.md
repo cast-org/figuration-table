@@ -18,4 +18,3 @@ Features:
 
 Requirements:
 - Tables must use `<thead>` and `<tbody>` elements.
-
