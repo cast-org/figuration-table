@@ -26,6 +26,7 @@
     CFW_Widget_Table.DEFAULTS = {
         sortable: false,
         editable: false,
+        coledit: false,
         editor: '<input type="text">',
         editorProps: [
             'font',
@@ -67,11 +68,13 @@
             this.$element.addClass('figuration-table');
 
             if (this.settings.editable) {
-                this._editEnable();
+                this.editEnable();
             }
-
+            if (this.settings.coledit) {
+                this.colEditEnable();
+            }
             if (this.settings.sortable) {
-                this._sortEnable();
+                this.sortEnable();
             }
 
             this.$element.CFW_trigger('init.cfw.table');
@@ -185,9 +188,8 @@
         },
 
         _showEditor : function() {
-            if (!this.settings.editable) { return; }
-
-            this.$active = this.$element.find('td:focus');
+            if (!this.settings.editable && !this.settings.coledit) { return; }
+            this.$active = this.$element.find('td:focus, th:focus');
             if (this.$active.length) {
                 this._editorCreate(this.$active);
                 // this.$editor.select();
@@ -225,7 +227,7 @@
             var $nextRow = $parent.next();
             var selectorCells = this.selectors.rowCells;
 
-            if (this.settings.sortable) {
+            if (this.settings.sortable || this.settings.coledit) {
                 selectorCells = selectorCells + ',' + this.selectors.headCells;
                 var $rows = this.$element.find(this.selectors.rowElm);
                 var count = $rows.length;
@@ -335,7 +337,7 @@
             }
         },
 
-        _editEnable : function() {
+        editEnable : function() {
             this.settings.editable = true;
             this.$element
                 .on('click.cfw.table', this.selectors.rowCells, $.proxy(this._showEditor, this))
@@ -344,7 +346,7 @@
             this._updateCells();
         },
 
-        _editDisable : function() {
+        editDisable : function() {
             this.settings.editable = false;
             this.$element
                 .off('click.cfw.table', this.selectors.rowCells)
@@ -399,11 +401,13 @@
 
             $heads
                 .removeAttr('aria-sort')
-                .removeClass('sort-ascending sort-descending')
+                .removeClass('sort-icon sort-ascending sort-descending')
                 .removeData('cfw.table.sortOrder');
 
             if (this.settings.sortable) {
-                $heads.attr('tabindex', 0);
+                $heads
+                    .attr('tabindex', 0)
+                    .addClass('sort-icon');
             } else {
                 $heads.removeAttr('tabindex');
             }
@@ -417,9 +421,14 @@
             }
         },
 
-        _sortEnable : function() {
+        sortEnable : function() {
             var $selfRef = this;
+
+            if (this.settings.coledit) {
+                this.colEditDisable();
+            }
             this.settings.sortable = true;
+
             this.$element
                 .on('click.cfw.table', this.selectors.headCols, function(e) {
                     var index = $(e.target).index();
@@ -447,19 +456,44 @@
             this._sortUpdate();
         },
 
-        _sortDisable : function() {
+        sortDisable : function() {
             this.settings.sortable = false;
             this.$element
                 .off('click.cfw.table', this.selectors.headCols)
+                .off('keydown.cfw.table', this.selectors.headCols)
                 .removeClass('sortable');
             this.$sorter = null;
             this._sortUpdate();
         },
 
+        colEditEnable : function() {
+            if (this.settings.sortable) {
+                this.sortDisable();
+            }
+            this.settings.coledit = true;
+
+            var $heads = this.$element.find(this.selectors.headCols);
+            $heads.attr('tabindex', 0);
+
+            this.$element
+                .on('click.cfw.table', this.selectors.headCols, $.proxy(this._showEditor, this))
+                .on('keydown.cfw.table', this.selectors.headCols, $.proxy(this._actionKeydown, this));
+        },
+
+        colEditDisable : function() {
+            this.settings.coledit = false;
+            this.$element
+                .off('click.cfw.table', this.selectors.headCols)
+                .off('keydown.cfw.table', this.selectors.headCols);
+
+            var $heads = this.$element.find(this.selectors.headCols);
+            $heads.removeAttr('tabindex');
+        },
+
         dispose : function() {
             this._editorRemove();
-            this._editDisable();
-            this._sortDisable();
+            this.editDisable();
+            this.sortDisable();
 
             this.$element
                 .removeClass('figuration-table')
