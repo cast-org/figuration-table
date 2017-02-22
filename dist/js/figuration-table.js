@@ -231,6 +231,7 @@ if (typeof jQuery === 'undefined') {
     CFW_Widget_Table.DEFAULTS = {
         sortable: false,
         editable: false,
+        coledit: false,
         editor: '<input type="text">',
         editorProps: [
             'font',
@@ -272,11 +273,13 @@ if (typeof jQuery === 'undefined') {
             this.$element.addClass('figuration-table');
 
             if (this.settings.editable) {
-                this._editEnable();
+                this.editEnable();
             }
-
+            if (this.settings.coledit) {
+                this.colEditEnable();
+            }
             if (this.settings.sortable) {
-                this._sortEnable();
+                this.sortEnable();
             }
 
             this.$element.CFW_trigger('init.cfw.table');
@@ -390,9 +393,8 @@ if (typeof jQuery === 'undefined') {
         },
 
         _showEditor : function() {
-            if (!this.settings.editable) { return; }
-
-            this.$active = this.$element.find('td:focus');
+            if (!this.settings.editable && !this.settings.coledit) { return; }
+            this.$active = this.$element.find('td:focus, th:focus');
             if (this.$active.length) {
                 this._editorCreate(this.$active);
                 // this.$editor.select();
@@ -430,7 +432,7 @@ if (typeof jQuery === 'undefined') {
             var $nextRow = $parent.next();
             var selectorCells = this.selectors.rowCells;
 
-            if (this.settings.sortable) {
+            if (this.settings.sortable || this.settings.coledit) {
                 selectorCells = selectorCells + ',' + this.selectors.headCells;
                 var $rows = this.$element.find(this.selectors.rowElm);
                 var count = $rows.length;
@@ -449,11 +451,6 @@ if (typeof jQuery === 'undefined') {
                 /* Up    */ case 38: { return $prevRow.children().eq($node.index()); }
                 /* Right */ case 39: { return $node.next(selectorCells); }
                 /* Down  */ case 40: { return $nextRow.children().eq($node.index()); }
-
-                // /* Left  */ case 37: { return $node.prev(selectorCells); }
-                // /* Up    */ case 38: { return $node.parent().prev().children().eq($node.index()); }
-                // /* Right */ case 39: { return $node.next(selectorCells); }
-                // /* Down  */ case 40: { return $node.parent().next().children().eq($node.index()); }
             }
         },
 
@@ -545,7 +542,7 @@ if (typeof jQuery === 'undefined') {
             }
         },
 
-        _editEnable : function() {
+        editEnable : function() {
             this.settings.editable = true;
             this.$element
                 .on('click.cfw.table', this.selectors.rowCells, $.proxy(this._showEditor, this))
@@ -554,7 +551,7 @@ if (typeof jQuery === 'undefined') {
             this._updateCells();
         },
 
-        _editDisable : function() {
+        editDisable : function() {
             this.settings.editable = false;
             this.$element
                 .off('click.cfw.table', this.selectors.rowCells)
@@ -563,11 +560,13 @@ if (typeof jQuery === 'undefined') {
             this._updateCells();
         },
 
-        // Borrows and modified from:
+        // Borrowed and modified from:
         // http://stackoverflow.com/a/19947532
         // http://jsfiddle.net/Zhd2X/20/
-        _sortSimple : function(index) {
+        _sortSimple : function(index, asc) {
             if (!this.settings.sortable) { return; }
+
+            if (asc === undefined) { asc = true; }
 
             function getCellValue(row, index) {
                 return $(row).children('td').eq(index).html();
@@ -583,12 +582,9 @@ if (typeof jQuery === 'undefined') {
 
             this.$sorter = this.$element.find(this.selectors.headCols).eq(index);
             var $rows = this.$element.find(this.selectors.bodyRows);
-            var asc = this.$sorter.data('cfw.table.sortOrder');
-
-            if (typeof asc !== undefined) {
-                asc = !asc;
-            } else {
-                asc = true;
+            var ascData = this.$sorter.data('cfw.table.sortOrder');
+            if (typeof ascData !== undefined) {
+                asc = !ascData;
             }
 
             this.$sorter.data('cfw.table.sortOrder', asc);
@@ -610,11 +606,13 @@ if (typeof jQuery === 'undefined') {
 
             $heads
                 .removeAttr('aria-sort')
-                .removeClass('sort-ascending sort-descending')
+                .removeClass('sort-icon sort-ascending sort-descending')
                 .removeData('cfw.table.sortOrder');
 
             if (this.settings.sortable) {
-                $heads.attr('tabindex', 0);
+                $heads
+                    .attr('tabindex', 0)
+                    .addClass('sort-icon');
             } else {
                 $heads.removeAttr('tabindex');
             }
@@ -628,8 +626,14 @@ if (typeof jQuery === 'undefined') {
             }
         },
 
-        _sortEnable : function() {
+        sortEnable : function() {
             var $selfRef = this;
+
+            if (this.settings.coledit) {
+                this.colEditDisable();
+            }
+            this.settings.sortable = true;
+
             this.$element
                 .on('click.cfw.table', this.selectors.headCols, function(e) {
                     var index = $(e.target).index();
@@ -657,18 +661,44 @@ if (typeof jQuery === 'undefined') {
             this._sortUpdate();
         },
 
-        _sortDisable : function() {
+        sortDisable : function() {
+            this.settings.sortable = false;
             this.$element
                 .off('click.cfw.table', this.selectors.headCols)
+                .off('keydown.cfw.table', this.selectors.headCols)
                 .removeClass('sortable');
             this.$sorter = null;
             this._sortUpdate();
         },
 
+        colEditEnable : function() {
+            if (this.settings.sortable) {
+                this.sortDisable();
+            }
+            this.settings.coledit = true;
+
+            var $heads = this.$element.find(this.selectors.headCols);
+            $heads.attr('tabindex', 0);
+
+            this.$element
+                .on('click.cfw.table', this.selectors.headCols, $.proxy(this._showEditor, this))
+                .on('keydown.cfw.table', this.selectors.headCols, $.proxy(this._actionKeydown, this));
+        },
+
+        colEditDisable : function() {
+            this.settings.coledit = false;
+            this.$element
+                .off('click.cfw.table', this.selectors.headCols)
+                .off('keydown.cfw.table', this.selectors.headCols);
+
+            var $heads = this.$element.find(this.selectors.headCols);
+            $heads.removeAttr('tabindex');
+        },
+
         dispose : function() {
             this._editorRemove();
-            this._editDisable();
-            this._sortDisable();
+            this.editDisable();
+            this.sortDisable();
 
             this.$element
                 .removeClass('figuration-table')
