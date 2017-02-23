@@ -57,5 +57,14 @@
 .figuration-table-editor {
   position: absolute;
   border: 0;
+  -webkit-box-shadow: inset 0px 0px 0.125rem 0.1875rem #4d90fe;
+          box-shadow: inset 0px 0px 0.125rem 0.1875rem #4d90fe;
+  outline: 0;
+}
+
+.figuration-table-editor.error {
+  -webkit-box-shadow: inset 0px 0px 0.125rem 0.1875rem red;
+          box-shadow: inset 0px 0px 0.125rem 0.1875rem red;
+  outline: 0;
 }
 /*# sourceMappingURL=figuration-table.css.map */

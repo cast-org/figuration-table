@@ -16,6 +16,14 @@ $table-focus-outline:           2px auto rgb(77, 144, 254) !default;
 $table-focus-outline-offset:    -2px !default;
 $table-focus-ring-shadow:       inset 0px 0px .125rem .1875rem rgb(77, 144, 254) !default;
 
+
+// Error Indicator
+// =====
+$table-error-outline:           2px auto rgb(255, 0, 0) !default;
+$table-error-outline-offset:    -2px !default;
+$table-error-ring-shadow:       inset 0px 0px .125rem .1875rem rgb(255, 0, 0) !default;
+
+
 // Sort Icons
 // Thanks to: Open Iconic - www.useiconic.com/open
 // =====

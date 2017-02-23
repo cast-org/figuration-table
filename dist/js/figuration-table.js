@@ -209,6 +209,7 @@ if (typeof jQuery === 'undefined') {
  * Licensed under MIT (https://github.com/cast-org/figuration-table/blob/master/LICENSE)
  * --------------------------------------------------------------------------
  */
+/* globals JSON */
 
 (function($) {
     'use strict';
@@ -232,6 +233,7 @@ if (typeof jQuery === 'undefined') {
         sortable: false,
         editable: false,
         coledit: false,
+        json: null,
         editor: '<input type="text">',
         editorProps: [
             'font',
@@ -249,9 +251,7 @@ if (typeof jQuery === 'undefined') {
             'border-top',
             'border-bottom',
             'border-left',
-            'border-right',
-            'box-shadow',
-            'outline'
+            'border-right'
         ]
     };
 
@@ -266,12 +266,43 @@ if (typeof jQuery === 'undefined') {
         rowCells:   'td'
     };
 
+    $.fn.CFW_Table_JSON = function() {
+        var $table = $(this);
+        var tableData = [];
+
+        // Get column headers
+        var headers = [];
+        var $cols = $table.find('thead th');
+        var countCol = $cols.length;
+        for (var i = 0; i < countCol; i++) {
+            headers[i] = $cols.eq(i).text();
+        }
+
+        // Get cells
+        var $rows = $table.find('tbody tr');
+        var countRow = $rows.length;
+
+        for (i = 0; i < countRow; i++) {
+            var rowData = {};
+            var $cells = $rows.eq(i).find('td');
+            for (var j = 0; j < countCol; j++) {
+                rowData[headers[j]] = $cells.eq(j).text();
+            }
+            tableData.push(rowData);
+        }
+
+        var json = JSON.stringify(tableData);
+        return json;
+    };
 
     CFW_Widget_Table.prototype = {
         _init : function() {
             this.instance = this.$element.CFW_getID('cfw-table');
             this.$element.addClass('figuration-table');
 
+            if (this.settings.json !== null) {
+                this.jsonInput(this.settings.json);
+            }
             if (this.settings.editable) {
                 this.editEnable();
             }
@@ -287,6 +318,11 @@ if (typeof jQuery === 'undefined') {
 
         insertRow : function(index) {
             var $selfRef = this;
+
+            if (!this.$element.CFW_trigger('beforeInsertRow.cfw.table')) {
+                return;
+            }
+
             if (index == null) { index = -1; }  // Assume append to end
 
             // Get count of columns (largest value)
@@ -300,9 +336,15 @@ if (typeof jQuery === 'undefined') {
                 var cell = row.insertCell(i);
                 this._updateCell(cell);
             }
+
+            this.$element.CFW_trigger('afterInsertRow.cfw.table');
         },
 
         deleteRow : function(index) {
+            if (!this.$element.CFW_trigger('beforeDeleteRow.cfw.table')) {
+                return;
+            }
+
             if (index == null) { index = -1; }  // Assume remove from end
 
             // Do not delete all rows
@@ -310,9 +352,15 @@ if (typeof jQuery === 'undefined') {
             if ($rows.length > 1) {
                 this.element.deleteRow(index);
             }
+
+            this.$element.CFW_trigger('afterDeleteRow.cfw.table');
         },
 
         appendCol : function(index) {
+            if (!this.$element.CFW_trigger('beforeAppendCol.cfw.table')) {
+                return;
+            }
+
             if (index == null) { index = -1; }  // Assume append to end
 
             // Add cell to header
@@ -335,9 +383,15 @@ if (typeof jQuery === 'undefined') {
             if (this.settings.sortable) {
                 this._sortUpdate();
             }
+
+            this.$element.CFW_trigger('afterAppendCol.cfw.table');
         },
 
         removeCol : function(index) {
+            if (!this.$element.CFW_trigger('beforeRemoveCol.cfw.table')) {
+                return;
+            }
+
             if (index == null) { index = -1; }  // Assume remove from end
 
             // Do not delete all cols
@@ -358,6 +412,8 @@ if (typeof jQuery === 'undefined') {
             if (this.settings.sortable) {
                 this._sortUpdate();
             }
+
+            this.$element.CFW_trigger('afterRemoveCol.cfw.table');
         },
 
         _updateCells : function() {
@@ -504,8 +560,10 @@ if (typeof jQuery === 'undefined') {
                     }
                 })
                 .on('input.cfw.table paste.cfw.table', function() {
-                    var result = $selfRef.$active.CFW_trigger('validate.cfw.table', { value: $selfRef.$editor.val() });
-                    if (result === false) {
+                    var evt = $.Event('validate.cfw.table');
+                    evt = $.extend({}, evt, { value: $selfRef.$editor.val() });
+                    $selfRef.$active.trigger(evt);
+                    if (evt.result === false) {
                         $selfRef.$editor.addClass('error');
                     } else {
                         $selfRef.$editor.removeClass('error');
@@ -536,16 +594,22 @@ if (typeof jQuery === 'undefined') {
                 return true;
             }
 
-            var result = this.$active.text(newVal).CFW_trigger('change.cfw.table', { value: newVal });
-            if (result === false) {
+            var evt = $.Event('change.cfw.table');
+            evt = $.extend({}, evt, { value: newVal });
+            this.$active.text(newVal).trigger(evt);
+            if (evt.result === false) {
                 this.$active.html(origVal);
             }
+
+            this._updateCell(this.$active);
         },
 
         editEnable : function() {
             this.settings.editable = true;
             this.$element
+                .off('click.cfw.table', this.selectors.rowCells)
                 .on('click.cfw.table', this.selectors.rowCells, $.proxy(this._showEditor, this))
+                .off('keydown.cfw.table', this.selectors.rowCells)
                 .on('keydown.cfw.table', this.selectors.rowCells, $.proxy(this._actionKeydown, this))
                 .addClass('editable');
             this._updateCells();
@@ -635,10 +699,12 @@ if (typeof jQuery === 'undefined') {
             this.settings.sortable = true;
 
             this.$element
+                .off('click.cfw.table', this.selectors.headCols)
                 .on('click.cfw.table', this.selectors.headCols, function(e) {
                     var index = $(e.target).index();
                     $selfRef._sortSimple(index);
                 })
+                .off('keydown.cfw.table', this.selectors.headCols)
                 .on('keydown.cfw.table', this.selectors.headCols, function(e) {
                     // 13-enter, 37-left, 38-up, 39-right, 40-down
                     if (!/(13|37|38|39|40)/.test(e.which)) { return; }
@@ -681,7 +747,9 @@ if (typeof jQuery === 'undefined') {
             $heads.attr('tabindex', 0);
 
             this.$element
+                .off('click.cfw.table', this.selectors.headCols)
                 .on('click.cfw.table', this.selectors.headCols, $.proxy(this._showEditor, this))
+                .off('keydown.cfw.table', this.selectors.headCols)
                 .on('keydown.cfw.table', this.selectors.headCols, $.proxy(this._actionKeydown, this));
         },
 
@@ -695,10 +763,73 @@ if (typeof jQuery === 'undefined') {
             $heads.removeAttr('tabindex');
         },
 
+        _buildTable : function() {
+            var $table = this.$element;
+
+            var $tbody = $table.find('tbody');
+            if (!$tbody.length) {
+                $tbody = $(document.createElement('tbody')).appendTo($table);
+            }
+
+            var $thead = $table.find('thead');
+            if (!$thead.length) {
+                $thead = $(document.createElement('thead')).insertBefore($tbody);
+            }
+
+            // var $throw = $thead.find('tr');
+            // if (!$throw.length) {
+            //     $(document.createElement('tr')).appendTo($thead);
+            // }
+        },
+
+        _buildColumns : function(arr) {
+            var cols = [];
+            var $thead = this.$element.find('thead');
+            var $row = $(document.createElement('tr'));
+            var count = arr.length;
+
+            for (var i = 0; i < count; i++) {
+                for (var key in arr[i]) {
+                    if ($.inArray(key, cols) == -1) {
+                        cols.push(key);
+                        $row.append($('<th/>').text(key));
+                    }
+                }
+            }
+            $thead.append($row);
+
+            return cols;
+        },
+
+        _buildRows : function(cols, arr) {
+            var $tbody = this.$element.find('tbody');
+            var count = arr.length;
+            for (var i = 0; i < count; i++) {
+                var $row = $(document.createElement('tr'));
+                var colCount = cols.length;
+
+                for (var j = 0; j < colCount; j++) {
+                    var cellVal = arr[i][cols[j]];
+                    if (cellVal == null) cellVal = '';
+                    var $cell = $(document.createElement('td')).text(cellVal);
+                    $row.append($cell);
+                    this._updateCell($cell);
+                }
+                $tbody.append($row);
+            }
+        },
+
+        jsonInput : function(json) {
+            this._buildTable();
+            var cols = this._buildColumns(json);
+            this._buildRows(cols, json);
+        },
+
         dispose : function() {
             this._editorRemove();
             this.editDisable();
             this.sortDisable();
+            this.colEditDisable();
 
             this.$element
                 .removeClass('figuration-table')

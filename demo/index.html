@@ -103,6 +103,61 @@
 
 <hr />
 
+<h3>JSON Loaded Table</h3>
+
+<div class="table-responsive">
+    <table id="ex1" class="table table-bordered table-condensed" data-cfw-table-sortable="true"></table>
+</div>
+
+<h3>JSON Output</h3>
+
+<p>Use the included <code>$.CFW_Table_JSON()</code> jQuery function to convert the table data to JSON for other uses, such as saving to the server.</p>
+
+<p>The following example shows how to generate the second table example back to JSON.
+
+<pre><code>var output = $('#ex1').CFW_Table_JSON();</code></pre>
+
+<p>Generate JSON output from either of the above tables, see the output below.  The results will include any updates or edits to the table.</p>
+
+<div class="mb-0_5">
+    <button type="button" onclick="outputJson('ex0'); return false;">Table 1</button>
+    <button type="button" onclick="outputJson('ex1'); return false;">Table 2</button>
+</div>
+
+<pre id="ex-json" style="white-space: pre-wrap;"></pre>
+
+<script>
+$.getJSON('sample.json')
+    .done(function(jsonData) {
+        $('#ex1').CFW_Table({
+            json: jsonData,
+            sortable: true,
+            editable: true,
+        });
+    })
+    .fail(function(jqxhr, textStatus, error) {
+        var msg = textStatus + ', ' + error;
+        console.log( "Request Failed: " + msg );
+    });
+
+function outputJson(id) {
+    var output = $('#' + id).CFW_Table_JSON();
+console.log(output);
+    $('#ex-json')
+        .empty()
+        .text(output);
+}
+
+/*
+$('#ex1').on('validate.cfw.table', 'td', function(e) {
+    console.log('New value: ' + e.value);
+    return false;
+});
+*/
+</script>
+
+<hr />
+
 <h3>Static Table</h3>
 <div class="table-responsive">
     <table id="exS" class="table table-bordered table-condensed" data-cfw="table">
@@ -258,6 +313,9 @@
 </div>
 
 <h3>Events</h3>
+
+<p>Most events are triggered on the <code>table</code> element, with a few exceptions, noted below.</p>
+
 <div class="table-responsive">
     <table class="table table-bordered table-striped">
     <thead>
@@ -272,8 +330,44 @@
             <td>Initialization complete.</td>
         </tr>
         <tr>
+            <td>validate.cfw.table</td>
+            <td>Called on the active cell. Fires on change on input when editing a cell. If the event gets a return value of <code>false</code>, an <code>.error</code> class is added to the editor input.</td>
+        </tr>
+        <tr>
             <td>change.cfw.table</td>
-            <td>Fires when content of a table cell changes.</td>
+            <td>Called on the active cell. Fires when content of a table cell changes. If the event gets a return value of <code>false</code> the change is stopped.</td>
+        </tr>
+        <tr>
+            <td>beforeInsertRow.cfw.table</td>
+            <td>Fires before a row is inserted.</td>
+        </tr>
+        <tr>
+            <td>afterInsertRow.cfw.table</td>
+            <td>Fires after a row is inserted.</td>
+        </tr>
+        <tr>
+            <td>beforeDeleteRow.cfw.table</td>
+            <td>Fires before a row is deleted.</td>
+        </tr>
+        <tr>
+            <td>afterDeleteRow.cfw.table</td>
+            <td>Fires after a row is deleted.</td>
+        </tr>
+        <tr>
+            <td>beforeAppendCol.cfw.table</td>
+            <td>Fires before a column is appended.</td>
+        </tr>
+        <tr>
+            <td>afterAppendCol.cfw.table</td>
+            <td>Fires after a row is appended.</td>
+        </tr>
+        <tr>
+            <td>beforeRemoveCol.cfw.table</td>
+            <td>Fires before a row is removed.</td>
+        </tr>
+        <tr>
+            <td>afterRemoveCol.cfw.table</td>
+            <td>Fires after a row is removed.</td>
         </tr>
     </tbody>
     </table>

@@ -94,4 +94,22 @@ $padC: mapPadding($table-condensed-cell-padding);
 .figuration-table-editor {
     position: absolute;
     border: 0; // 1
+
+    @if $table-enable-focus-ring {
+        box-shadow: $table-focus-ring-shadow;
+        outline: 0;
+    } @else {
+        outline: $table-focus-outline;
+        outline-offset: $table-focus-outline-offset;
+    }
+
+    &.error {
+        @if $table-enable-focus-ring {
+            box-shadow: $table-error-ring-shadow;
+            outline: 0;
+        } @else {
+            outline: $table-error-outline;
+            outline-offset: $table-error-outline-offset;
+        }
+    }
 }
