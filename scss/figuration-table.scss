@@ -28,6 +28,7 @@ $padC: mapPadding($table-condensed-cell-padding);
 }
 
 // Minimum cell height
+// For a td, height works similar to min-height
 .figuration-table {
     td {
         height: calc(#{($line-height-base * $font-size-base)} + #{map-get($padN, "top")} + #{map-get($padN, "bottom")});
@@ -68,6 +69,13 @@ $padC: mapPadding($table-condensed-cell-padding);
     }
 
     .sort-icon {
+        position: absolute;
+        top: 0;
+        right: 0;
+        display: block;
+        width: 2rem;
+        height: 2rem;
+        content: " ";
         background-image: $table-sort-icon-base;
         background-repeat: no-repeat;
         background-position: center right ($input-height / 4);

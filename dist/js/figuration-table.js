@@ -259,6 +259,7 @@ if (typeof jQuery === 'undefined') {
         headRow:    'thead tr',
         headCols:   'thead th',
         headCells:  'th',
+        headSort:   'thead th .sort-icon',
         bodyElm:    'tbody',
         bodyRows:   'tbody tr',
         bodyCells:  'tbody td',
@@ -489,13 +490,14 @@ if (typeof jQuery === 'undefined') {
             var $node = $(e.target);
 
             // Basic cell movement
-            var $parent = $node.parent();   // Parent row
+            var $parent = $node.closest(this.selectors.rowElm); // Parent row
             var $prevRow = $parent.prev();
             var $nextRow = $parent.next();
             var selectorCells = this.selectors.rowCells;
 
             if (this.settings.sortable || this.settings.coledit) {
-                selectorCells = selectorCells + ',' + this.selectors.headCells;
+                selectorCells += ',' + this.selectors.headCells;
+
                 var $rows = this.$element.find(this.selectors.rowElm);
                 var count = $rows.length;
 
@@ -506,13 +508,19 @@ if (typeof jQuery === 'undefined') {
                         break;
                     }
                 }
+
+                if (this.settings.sortable) {
+                    if ($node.hasClass('sort-icon')) {
+                        $node = $node.closest(this.selectors.headCells);
+                    }
+                }
             }
 
             switch (e.which) {
-                /* Left  */ case 37: { return $node.prev(selectorCells); }
-                /* Up    */ case 38: { return $prevRow.children().eq($node.index()); }
-                /* Right */ case 39: { return $node.next(selectorCells); }
-                /* Down  */ case 40: { return $nextRow.children().eq($node.index()); }
+                /* Left  */ case 37: { return $node.prev(selectorCells).find('[tabindex=0]').addBack().filter('[tabindex=0]').first(); }
+                /* Up    */ case 38: { return $prevRow.children().eq($node.index()).find('[tabindex=0]').addBack().filter('[tabindex=0]').first(); }
+                /* Right */ case 39: { return $node.next(selectorCells).find('[tabindex=0]').addBack().filter('[tabindex=0]').first(); }
+                /* Down  */ case 40: { return $nextRow.children().eq($node.index()).find('[tabindex=0]').addBack().filter('[tabindex=0]').first(); }
             }
         },
 
@@ -676,38 +684,46 @@ if (typeof jQuery === 'undefined') {
 
             $heads
                 .removeAttr('aria-sort')
-                .removeClass('sort-icon sort-ascending sort-descending')
-                .removeData('cfw.table.sortOrder');
+                .removeData('cfw.table.sortOrder')
+                .find('.sort-icon')
+                    .removeClass('sort-ascending sort-descending');
 
             if (this.settings.sortable) {
-                $heads
-                    .attr('tabindex', 0)
-                    .addClass('sort-icon');
-            } else {
-                $heads.removeAttr('tabindex');
+                $.each($heads, function() {
+                    var $this = $(this);
+                    if (!$this.find('.sort-icon').length) {
+                        var $icon = $('<a href="#" role="button" class="sort-icon" tabindex=0 aria-label="Change column sort order">');
+                        $this.append($icon);
+                    }
+                });
+            }
+
+            if (!this.settings.coledit) {
+                $heads.attr('tabindex', -1);
             }
 
             if (this.$sorter !== null) {
-                var icon = 'sort-' + ascString;
+                var iconName = 'sort-' + ascString;
                 this.$sorter
-                    .addClass(icon)
                     .attr('aria-sort', ascString)
-                    .data('cfw.table.sortOrder', asc);
+                    .data('cfw.table.sortOrder', asc)
+                    .find('.sort-icon')
+                        .addClass(iconName);
             }
         },
 
         sortEnable : function() {
             var $selfRef = this;
 
-            if (this.settings.coledit) {
-                this.colEditDisable();
-            }
+            // if (this.settings.coledit) {
+            //     this.colEditDisable();
+            // }
             this.settings.sortable = true;
 
             this.$element
-                .off('click.cfw.table', this.selectors.headCols)
-                .on('click.cfw.table', this.selectors.headCols, function(e) {
-                    var index = $(e.target).index();
+                .off('click.cfw.table', this.selectors.headSort)
+                .on('click.cfw.table', this.selectors.headSort, function(e) {
+                    var index = $(e.target).closest($selfRef.selectors.headCells).index();
                     $selfRef._sortSimple(index);
                 })
                 .off('keydown.cfw.table', this.selectors.headCols)
@@ -719,7 +735,7 @@ if (typeof jQuery === 'undefined') {
                     e.preventDefault();
 
                     if (e.which == 13) { // Enter
-                        var index = $(e.target).index();
+                        var index = $(e.target).closest($selfRef.selectors.headCells).index();
                         $selfRef._sortSimple(index);
                         return;
                     }
@@ -736,7 +752,7 @@ if (typeof jQuery === 'undefined') {
         sortDisable : function() {
             this.settings.sortable = false;
             this.$element
-                .off('click.cfw.table', this.selectors.headCols)
+                .off('click.cfw.table', this.selectors.headSort)
                 .off('keydown.cfw.table', this.selectors.headCols)
                 .removeClass('sortable');
             this.$sorter = null;
@@ -744,9 +760,6 @@ if (typeof jQuery === 'undefined') {
         },
 
         colEditEnable : function() {
-            if (this.settings.sortable) {
-                this.sortDisable();
-            }
             this.settings.coledit = true;
 
             var $heads = this.$element.find(this.selectors.headCols);
@@ -766,7 +779,12 @@ if (typeof jQuery === 'undefined') {
                 .off('keydown.cfw.table', this.selectors.headCols);
 
             var $heads = this.$element.find(this.selectors.headCols);
-            $heads.removeAttr('tabindex');
+
+            if (this.settings.sortable) {
+                $heads.attr('tabindex', -1);
+            } else {
+                $heads.removeAttr('tabindex');
+            }
         },
 
         _buildTable : function() {

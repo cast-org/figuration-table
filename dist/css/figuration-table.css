@@ -39,6 +39,13 @@
 }
 
 .figuration-table.sortable .sort-icon {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: block;
+  width: 2rem;
+  height: 2rem;
+  content: " ";
   background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3E%3Cpath fill='%23000' d='M0 0v2h2v-2h-2zm3 0v2h2v-2h-2zm3 0v2h2v-2h-2z' transform='translate(0 3)'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: center right 0.5rem;
