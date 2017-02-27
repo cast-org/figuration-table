@@ -1,8 +1,13 @@
-[
-    { "First Name" : "George",       "Last Name" : "Washington", "Start Year" : 1789, "End Year" : 1797 },
-    { "First Name" : "John",         "Last Name" : "Adams",      "Start Year" : 1797, "End Year" : 1801 },
-    { "First Name" : "Thomas",       "Last Name" : "Jefferson",  "Start Year" : 1801, "End Year" : 1809 },
-    { "First Name" : "Abraham",      "Last Name" : "Lincoln",    "Start Year" : 1861, "End Year" : 1865 },
-    { "First Name" : "Theodore",     "Last Name" : "Roosevelt",  "Start Year" : 1901, "End Year" : 1909 },
-    { "First Name" : "Franklin D.",  "Last Name" : "Roosevelt",  "Start Year" : 1933, "End Year" : 1945 }
-]
+{
+    "header": [
+        "First Name", "Last Name", "Start Year", "End Year"
+    ],
+    "rows": [
+        [ "George", "Washington", "1789", "1797" ],
+        [ "John", "Adams", "1797", "1801" ],
+        [ "Thomas", "Jefferson", "1801", "1809" ],
+        [ "Abraham", "Lincoln", "1861", "1865" ],
+        [ "Theodore", "Roosevelt", "1901", "1909" ],
+        [ "Franklin D.", "Roosevelt", "1933", "1945" ]
+    ]
+}
