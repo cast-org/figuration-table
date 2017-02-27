@@ -268,28 +268,34 @@ if (typeof jQuery === 'undefined') {
 
     $.fn.CFW_Table_JSON = function() {
         var $table = $(this);
-        var tableData = [];
 
         // Get column headers
-        var headers = [];
+        var headerData = [];
         var $cols = $table.find('thead th');
         var countCol = $cols.length;
+
         for (var i = 0; i < countCol; i++) {
-            headers[i] = $cols.eq(i).text();
+            headerData[i] = $cols.eq(i).text();
         }
 
         // Get cells
+        var bodyData = [];
         var $rows = $table.find('tbody tr');
         var countRow = $rows.length;
 
         for (i = 0; i < countRow; i++) {
-            var rowData = {};
+            var rowData = [];
             var $cells = $rows.eq(i).find('td');
             for (var j = 0; j < countCol; j++) {
-                rowData[headers[j]] = $cells.eq(j).text();
+                rowData[j] = $cells.eq(j).text();
             }
-            tableData.push(rowData);
+            bodyData.push(rowData);
         }
+
+        var tableData = {
+            'header': headerData,
+            'rows': bodyData
+        };
 
         var json = JSON.stringify(tableData);
         return json;
@@ -782,34 +788,28 @@ if (typeof jQuery === 'undefined') {
             // }
         },
 
-        _buildColumns : function(arr) {
-            var cols = [];
+        _buildColumns : function(json) {
             var $thead = this.$element.find('thead');
             var $row = $(document.createElement('tr'));
-            var count = arr.length;
+            var count = json.header.length;
 
             for (var i = 0; i < count; i++) {
-                for (var key in arr[i]) {
-                    if ($.inArray(key, cols) == -1) {
-                        cols.push(key);
-                        $row.append($('<th/>').text(key));
-                    }
-                }
+                $row.append($('<th/>').text(json.header[i]));
             }
             $thead.append($row);
-
-            return cols;
         },
 
-        _buildRows : function(cols, arr) {
+        _buildRows : function(json) {
             var $tbody = this.$element.find('tbody');
-            var count = arr.length;
+            var count = json.rows.length;
+
             for (var i = 0; i < count; i++) {
+                var rowData = json.rows[i];
                 var $row = $(document.createElement('tr'));
-                var colCount = cols.length;
+                var colCount = rowData.length;
 
                 for (var j = 0; j < colCount; j++) {
-                    var cellVal = arr[i][cols[j]];
+                    var cellVal = rowData[j];
                     if (cellVal == null) cellVal = '';
                     var $cell = $(document.createElement('td')).text(cellVal);
                     $row.append($cell);
@@ -821,8 +821,8 @@ if (typeof jQuery === 'undefined') {
 
         jsonInput : function(json) {
             this._buildTable();
-            var cols = this._buildColumns(json);
-            this._buildRows(cols, json);
+            this._buildColumns(json);
+            this._buildRows(json);
         },
 
         dispose : function() {
