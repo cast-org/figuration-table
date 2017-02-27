@@ -3,25 +3,11 @@
 // Copy settings from this file into the provided `_custom.scss` to override the defaults.
 // This allows for customization without changing core files.
 
-
-// Options
+// Box shadows (border emulation)
 // =====
-// Quickly modify global styling by enabling or disabling optional features.
-$table-enable-focus-ring:   true !default;
-
-
-// Focus Indicator
-// =====
-$table-focus-outline:           2px auto rgb(77, 144, 254) !default;
-$table-focus-outline-offset:    -2px !default;
-$table-focus-ring-shadow:       inset 0px 0px .125rem .1875rem rgb(77, 144, 254) !default;
-
-
-// Error Indicator
-// =====
-$table-error-outline:           2px auto rgb(255, 0, 0) !default;
-$table-error-outline-offset:    -2px !default;
-$table-error-ring-shadow:       inset 0px 0px .125rem .1875rem rgb(255, 0, 0) !default;
+$table-shadow-focus: inset 0 0 0 .125rem rgb(77, 144, 254) !default;
+$table-shadow-edit:  inset 0 0 0 .125rem rgb(0, 0, 255) !default;
+$table-shadow-error: inset 0 0 0 .125rem rgb(255, 0, 0) !default;
 
 
 // Sort Icons

@@ -48,13 +48,8 @@ $padC: mapPadding($table-condensed-cell-padding);
 
         &:focus {
             z-index: 2;
-            @if $table-enable-focus-ring {
-                box-shadow: $table-focus-ring-shadow;
-                outline: 0;
-            } @else {
-                outline: $table-focus-outline;
-                outline-offset: $table-focus-outline-offset;
-            }
+            box-shadow: $table-shadow-focus;
+            outline: 0;
         }
     }
 }
@@ -94,22 +89,11 @@ $padC: mapPadding($table-condensed-cell-padding);
 .figuration-table-editor {
     position: absolute;
     border: 0; // 1
+    box-shadow: $table-shadow-edit;
+    outline: 0;
 
-    @if $table-enable-focus-ring {
-        box-shadow: $table-focus-ring-shadow;
-        outline: 0;
-    } @else {
-        outline: $table-focus-outline;
-        outline-offset: $table-focus-outline-offset;
-    }
 
     &.error {
-        @if $table-enable-focus-ring {
-            box-shadow: $table-error-ring-shadow;
-            outline: 0;
-        } @else {
-            outline: $table-error-outline;
-            outline-offset: $table-error-outline-offset;
-        }
+        box-shadow: $table-shadow-error;
     }
 }
