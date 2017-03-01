@@ -526,6 +526,11 @@ if (typeof jQuery === 'undefined') {
 
         _editorCreate : function($node) {
             var $selfRef = this;
+
+            if (!this.$element.CFW_trigger('beforeShowEditor.cfw.table')) {
+                return;
+            }
+
             this.$editor = $(this.settings.editor)
                 .val($node.text())
                 .addClass('figuration-table-editor')
@@ -583,6 +588,8 @@ if (typeof jQuery === 'undefined') {
                         $selfRef.$editor.removeClass('error');
                     }
                 });
+
+            this.$element.CFW_trigger('afterShowEditor.cfw.table');
         },
 
         _editorPosition : function() {
@@ -594,10 +601,16 @@ if (typeof jQuery === 'undefined') {
         },
 
         _editorRemove : function() {
+            if (!this.$element.CFW_trigger('beforeHideEditor.cfw.table')) {
+                return;
+            }
+
             $(window).off('resize.cfw.table' + this.instance);
             this.$editor && this.$editor.remove();
             this.$editor = null;
             this.$active = null;
+
+            this.$element.CFW_trigger('afterHideEditor.cfw.table');
         },
 
         _setActiveValue : function() {

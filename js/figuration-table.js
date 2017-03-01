@@ -321,6 +321,11 @@
 
         _editorCreate : function($node) {
             var $selfRef = this;
+
+            if (!this.$element.CFW_trigger('beforeShowEditor.cfw.table')) {
+                return;
+            }
+
             this.$editor = $(this.settings.editor)
                 .val($node.text())
                 .addClass('figuration-table-editor')
@@ -378,6 +383,8 @@
                         $selfRef.$editor.removeClass('error');
                     }
                 });
+
+            this.$element.CFW_trigger('afterShowEditor.cfw.table');
         },
 
         _editorPosition : function() {
@@ -389,10 +396,16 @@
         },
 
         _editorRemove : function() {
+            if (!this.$element.CFW_trigger('beforeHideEditor.cfw.table')) {
+                return;
+            }
+
             $(window).off('resize.cfw.table' + this.instance);
             this.$editor && this.$editor.remove();
             this.$editor = null;
             this.$active = null;
+
+            this.$element.CFW_trigger('afterHideEditor.cfw.table');
         },
 
         _setActiveValue : function() {
