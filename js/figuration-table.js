@@ -71,7 +71,7 @@
         var countCol = $cols.length;
 
         for (var i = 0; i < countCol; i++) {
-            headerData[i] = $cols.eq(i).text();
+            headerData[i] = $.trim($cols.eq(i).text());
         }
 
         // Get cells
@@ -83,7 +83,7 @@
             var rowData = [];
             var $cells = $rows.eq(i).find('td');
             for (var j = 0; j < countCol; j++) {
-                rowData[j] = $cells.eq(j).text();
+                rowData[j] = $.trim($cells.eq(j).text());
             }
             bodyData.push(rowData);
         }
@@ -237,11 +237,13 @@
 
         _updateCell : function(node) {
             var $node = $(node);
+            var content = $.trim($node.text());
+            $node.text(content);
 
             this._resetCell($node);
 
             // Align right if numeric
-            if ($.isNumeric($node.text())) {
+            if ($.isNumeric(content)) {
                 $node.addClass('text-right');
             }
 
@@ -620,7 +622,7 @@
             var count = json.header.length;
 
             for (var i = 0; i < count; i++) {
-                $row.append($('<th/>').text(json.header[i]));
+                $row.append($('<th/>').text($.trim(json.header[i])));
             }
             $thead.append($row);
         },
