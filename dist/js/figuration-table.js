@@ -241,7 +241,7 @@ if (typeof jQuery === 'undefined') {
             'font-family',
             'font-weight',
             'line-height',
-            'text-align',
+            // 'text-align', // Input should use default alignment
             'padding',
             'padding-top',
             'padding-bottom',
@@ -276,7 +276,7 @@ if (typeof jQuery === 'undefined') {
         var countCol = $cols.length;
 
         for (var i = 0; i < countCol; i++) {
-            headerData[i] = $cols.eq(i).text();
+            headerData[i] = $.trim($cols.eq(i).text());
         }
 
         // Get cells
@@ -288,7 +288,7 @@ if (typeof jQuery === 'undefined') {
             var rowData = [];
             var $cells = $rows.eq(i).find('td');
             for (var j = 0; j < countCol; j++) {
-                rowData[j] = $cells.eq(j).text();
+                rowData[j] = $.trim($cells.eq(j).text());
             }
             bodyData.push(rowData);
         }
@@ -442,11 +442,13 @@ if (typeof jQuery === 'undefined') {
 
         _updateCell : function(node) {
             var $node = $(node);
+            var content = $.trim($node.text());
+            $node.text(content);
 
             this._resetCell($node);
 
             // Align right if numeric
-            if ($.isNumeric($node.text())) {
+            if ($.isNumeric(content)) {
                 $node.addClass('text-right');
             }
 
@@ -667,7 +669,12 @@ if (typeof jQuery === 'undefined') {
                 return function(a, b) {
                     var valA = getCellValue(a, index);
                     var valB = getCellValue(b, index);
-                    return $.isNumeric(valA) && $.isNumeric(valB) ? valA - valB : valA.localeCompare(valB);
+                    // return $.isNumeric(valA) && $.isNumeric(valB) ? valA - valB : valA.localeCompare(valB);
+
+                    // Set option `numeric: true` for string comparison
+                    // Forcing 'en' locale/language for the time being
+                    // Info: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/localeCompare
+                    return $.isNumeric(valA) && $.isNumeric(valB) ? valA - valB : valA.localeCompare(valB, 'en', { numeric: true });
                 };
             }
 
@@ -736,6 +743,7 @@ if (typeof jQuery === 'undefined') {
             this.$element
                 .off('click.cfw.table', this.selectors.headSort)
                 .on('click.cfw.table', this.selectors.headSort, function(e) {
+                    if (e) { e.preventDefault(); }
                     var index = $(e.target).closest($selfRef.selectors.headCells).index();
                     $selfRef._sortSimple(index);
                 })
@@ -825,7 +833,7 @@ if (typeof jQuery === 'undefined') {
             var count = json.header.length;
 
             for (var i = 0; i < count; i++) {
-                $row.append($('<th/>').text(json.header[i]));
+                $row.append($('<th/>').text($.trim(json.header[i])));
             }
             $thead.append($row);
         },
