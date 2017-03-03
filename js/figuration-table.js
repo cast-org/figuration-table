@@ -425,7 +425,11 @@
                 this.$active.html(origVal);
             }
 
-            this._updateCell(this.$active);
+            if (this.$active.is(this.selectors.headCells)) {
+                this._sortUpdate();
+            } else {
+                this._updateCell(this.$active);
+            }
         },
 
         editEnable : function() {
