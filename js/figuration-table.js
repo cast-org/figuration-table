@@ -464,7 +464,12 @@
                 return function(a, b) {
                     var valA = getCellValue(a, index);
                     var valB = getCellValue(b, index);
-                    return $.isNumeric(valA) && $.isNumeric(valB) ? valA - valB : valA.localeCompare(valB);
+                    // return $.isNumeric(valA) && $.isNumeric(valB) ? valA - valB : valA.localeCompare(valB);
+
+                    // Set option `numeric: true` for string comparison
+                    // Forcing 'en' locale/language for the time being
+                    // Info: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/localeCompare
+                    return $.isNumeric(valA) && $.isNumeric(valB) ? valA - valB : valA.localeCompare(valB, 'en', { numeric: true });
                 };
             }
 
