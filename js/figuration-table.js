@@ -533,6 +533,7 @@
             this.$element
                 .off('click.cfw.table', this.selectors.headSort)
                 .on('click.cfw.table', this.selectors.headSort, function(e) {
+                    if (e) { e.preventDefault(); }
                     var index = $(e.target).closest($selfRef.selectors.headCells).index();
                     $selfRef._sortSimple(index);
                 })
