@@ -24,8 +24,8 @@
 .figuration-table td:focus:not([tabindex="-1"]),
 .figuration-table th:focus:not([tabindex="-1"]) {
   z-index: 2;
-  -webkit-box-shadow: inset 0 0 0 0.125rem #4d90fe;
-          box-shadow: inset 0 0 0 0.125rem #4d90fe;
+  -webkit-box-shadow: inset 0 0 0 2px #4d90fe;
+          box-shadow: inset 0 0 0 2px #4d90fe;
   outline: 0;
 }
 
@@ -64,13 +64,13 @@
 .figuration-table-editor {
   position: absolute;
   border: 0;
-  -webkit-box-shadow: inset 0 0 0 0.125rem blue;
-          box-shadow: inset 0 0 0 0.125rem blue;
+  -webkit-box-shadow: inset 0 0 0 2px blue;
+          box-shadow: inset 0 0 0 2px blue;
   outline: 0;
 }
 
 .figuration-table-editor.error {
-  -webkit-box-shadow: inset 0 0 0 0.125rem red;
-          box-shadow: inset 0 0 0 0.125rem red;
+  -webkit-box-shadow: inset 0 0 0 2px red;
+          box-shadow: inset 0 0 0 2px red;
 }
 /*# sourceMappingURL=figuration-table.css.map */

@@ -3,11 +3,11 @@
 // Copy settings from this file into the provided `_custom.scss` to override the defaults.
 // This allows for customization without changing core files.
 
-// Box shadows (border emulation)
+// Box shadows (border emulation - use px)
 // =====
-$table-shadow-focus: inset 0 0 0 .125rem rgb(77, 144, 254) !default;
-$table-shadow-edit:  inset 0 0 0 .125rem rgb(0, 0, 255) !default;
-$table-shadow-error: inset 0 0 0 .125rem rgb(255, 0, 0) !default;
+$table-shadow-focus: inset 0 0 0 2px rgb(77, 144, 254) !default;
+$table-shadow-edit:  inset 0 0 0 2px rgb(0, 0, 255) !default;
+$table-shadow-error: inset 0 0 0 2px rgb(255, 0, 0) !default;
 
 
 // Sort Icons
