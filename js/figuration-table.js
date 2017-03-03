@@ -36,7 +36,7 @@
             'font-family',
             'font-weight',
             'line-height',
-            'text-align',
+            // 'text-align', // Input should use default alignment
             'padding',
             'padding-top',
             'padding-bottom',
