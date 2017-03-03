@@ -537,6 +537,7 @@ if (typeof jQuery === 'undefined') {
                 .val($node.text())
                 .addClass('figuration-table-editor')
                 .css($node.css(this.settings.editorProps))
+                .data('cfw.table', this)
                 .appendTo('body');
 
             this._editorPosition();
@@ -546,8 +547,7 @@ if (typeof jQuery === 'undefined') {
 
             this.$editor
                 .on('blur.cfw.table', function() {
-                    $selfRef._setActiveValue();
-                    $selfRef._editorRemove();
+                    $selfRef.saveActiveEditor();
                 })
                 .on('keydown.cfw.table', function(e) {
                     // `focus` change event will trigger `blur` event handler
@@ -591,7 +591,7 @@ if (typeof jQuery === 'undefined') {
                     }
                 });
 
-            this.$element.CFW_trigger('afterShowEditor.cfw.table');
+            this.$element.CFW_trigger('afterShowEditor.cfw.table', { editor: this.$editor[0] });
         },
 
         _editorPosition : function() {
@@ -603,16 +603,21 @@ if (typeof jQuery === 'undefined') {
         },
 
         _editorRemove : function() {
-            if (!this.$element.CFW_trigger('beforeHideEditor.cfw.table')) {
+            if (!this.$element.CFW_trigger('beforeHideEditor.cfw.table', { editor: this.$editor[0] })) {
                 return;
             }
 
             $(window).off('resize.cfw.table' + this.instance);
-            this.$editor && this.$editor.remove();
+            this.$editor && this.$editor.removeData('cfw.table').remove();
             this.$editor = null;
             this.$active = null;
 
             this.$element.CFW_trigger('afterHideEditor.cfw.table');
+        },
+
+        saveActiveEditor : function() {
+            this._setActiveValue();
+            this._editorRemove();
         },
 
         _setActiveValue : function() {
@@ -630,7 +635,11 @@ if (typeof jQuery === 'undefined') {
                 this.$active.html(origVal);
             }
 
-            this._updateCell(this.$active);
+            if (this.$active.is(this.selectors.headCells)) {
+                this._sortUpdate();
+            } else {
+                this._updateCell(this.$active);
+            }
         },
 
         editEnable : function() {
