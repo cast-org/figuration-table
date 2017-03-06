@@ -100,8 +100,13 @@ $padC: mapPadding($table-condensed-cell-padding);
     box-shadow: $table-shadow-edit;
     outline: 0;
 
-
     &.error {
         box-shadow: $table-shadow-error;
+    }
+
+    &[readonly] {
+        color: $table-editor-disabled-color;
+        background-color: $table-editor-disabled-bg;
+        opacity: 1;
     }
 }

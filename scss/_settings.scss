@@ -18,3 +18,12 @@ $table-sort-icon-width: 1rem !default;
 $table-sort-icon-base:  str-replace(url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3E%3Cpath fill='#{$table-sort-icon-color}' d='M0 0v2h2v-2h-2zm3 0v2h2v-2h-2zm3 0v2h2v-2h-2z' transform='translate(0 3)'/%3E%3C/svg%3E"), "#", "%23") !default;
 $table-sort-icon-asc:   str-replace(url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3E%3Cpath fill='#{$table-sort-icon-color}' d='M2 0v6h-2l2.5 2 2.5-2h-2v-6h-1zm2 0v1h2v-1h-2zm0 2v1h3v-1h-3zm0 2v1h4v-1h-4z'/%3E%3C/svg%3E"), "#", "%23") !default;
 $table-sort-icon-desc:  str-replace(url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3E%3Cpath fill='#{$table-sort-icon-color}' d='M2 0v6h-2l2.5 2 2.5-2h-2v-6h-1zm2 0v1h4v-1h-4zm0 2v1h3v-1h-3zm0 2v1h2v-1h-2z'/%3E%3C/svg%3E"), "#", "%23") !default;
+
+
+// Editor Input
+// =====
+// TODO: Change to use commented out values when Figuration 3.x is released
+// $table-editor-disabled-color: $input-disabled-color !default;
+// $table-editor-disabled-bg:    $input-disabled-bg !default;
+$table-editor-disabled-color:  palette($uibase, 450) !default;
+$table-editor-disabled-bg:     palette($uibase, 50) !default;
