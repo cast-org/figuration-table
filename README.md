@@ -20,4 +20,7 @@ Requirements:
 - Tables must use `<thead>` and `<tbody>` elements.
 
 Demo and some docs:
-[https://cast-org.github.io/figuration-table/demo/](https://cast-org.github.io/figuration-table/demo/)
+- [https://cast-org.github.io/figuration-table/demo/](https://cast-org.github.io/figuration-table/demo/)
+
+Additional Examples:
+- [With CAST STT](https://cast-org.github.io/figuration-table/demo/example-stt.html)

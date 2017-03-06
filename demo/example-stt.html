@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+<!-- Required meta tags always come first -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+<title>Figuration Table : Demo with STT</title>
+
+<!-- Figuration CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/figuration/2.0.0/css/figuration.min.css" integrity="sha384-4NEYqGqlkFmjCXappSYTanA6sCbHfuAbTw0y9/n3iEx6JVK5TzYEVyQWroUSR3vo" crossorigin="anonymous">
+<link rel="stylesheet" href="../dist/css/figuration-table.css">
+
+<!-- jQuery and Figuration JS -->
+<script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha384-3ceskX3iaEnIogmQchP8opvBy3Mi7Ce34nWjpBIwVTHfGYWQS9jwHDVRnpKKHJg7" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/figuration/2.0.0/js/figuration.min.js" integrity="sha384-CYqCLcTJYBDbNhvb4Y5FSqooQB6ZZZUBboJ2YkdFnNrf5BLWOy1WsKdaiSpOAZf/" crossorigin="anonymous"></script>
+<script src="../js/util.js"></script>
+<script src="../js/figuration-table.js"></script>
+
+<!-- STT -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+<link rel="stylesheet" href="https://mbrambilla.github.io/cast-stt/css/stt.css">
+<script src="https://mbrambilla.github.io/cast-stt/js/stt.js"></script>
+
+<style>
+.stt-editor {
+    margin-left: -4px;
+    margin-top: .375rem;
+}
+</style>
+
+</head>
+<body>
+
+<div class="container">
+
+<h1>Figuration Table : Example with STT</h1>
+
+<h2 class="mb-1">Example</h2>
+<p>
+    Example integration with <a href="https://github.com/mbrambilla/cast-stt">CAST Speech-to-text</a>.
+    Sortable, editable, and coledit enabled by default.
+</p>
+
+<div class="table-responsive">
+    <table id="ex0" class="table table-bordered table-condensed"></table>
+</div>
+
+<div class="mb-0_5">
+    <button type="button" onclick="$('#ex0').CFW_Table('insertRow'); return false;">Row: Insert</button>
+    <button type="button" class="mr-1" onclick="$('#ex0').CFW_Table('deleteRow'); return false;">Row: Delete</button>
+
+    <button type="button" onclick="$('#ex0').CFW_Table('appendCol'); return false;">Column: Append</button>
+    <button type="button" class="mr-1" onclick="$('#ex0').CFW_Table('removeCol'); return false;">Column: Remove</button>
+</div>
+<div>
+    <button type="button" onclick="$('#ex0').CFW_Table('sortEnable'); return false;">Sort: Enable</button>
+    <button type="button" class="mr-1" onclick="$('#ex0').CFW_Table('sortDisable'); return false;">Sort: Disable</button>
+
+    <button type="button" onclick="$('#ex0').CFW_Table('editEnable'); return false;">Edit: Enable</button>
+    <button type="button" class="mr-1" onclick="$('#ex0').CFW_Table('editDisable'); return false;">Edit: Disable</button>
+
+    <button type="button" onclick="$('#ex0').CFW_Table('colEditEnable'); return false;">ColEdit: Enable</button>
+    <button type="button" class="mr-1" onclick="$('#ex0').CFW_Table('colEditDisable'); return false;">ColEdit: Disable</button>
+</div>
+
+<h3 class="mt-1">JSON Output</h3>
+<div class="mb-0_5">
+    <button type="button" onclick="outputJson('ex0'); return false;">JSON Output</button>
+</div>
+<pre id="ex-json" style="white-space: pre-wrap;"></pre>
+
+<script>
+
+// Init Table and JSON output demo
+
+$.getJSON('sample.json')
+    .done(function(jsonData) {
+        $('#ex0').CFW_Table({
+            json: jsonData,
+            sortable: true,
+            editable: true,
+            coledit: true
+        });
+    })
+    .fail(function(jqxhr, textStatus, error) {
+        var msg = textStatus + ', ' + error;
+        console.log( "Request Failed: " + msg );
+    });
+
+function outputJson(id) {
+    var output = $('#' + id).CFW_Table_JSON();
+    $('#ex-json')
+        .empty()
+        .text(output);
+}
+
+// =====================
+
+// Speech-to-text integration
+
+function editorSTT($editor, $control) {
+    // 9-tab, 13-enter, 27-esc
+
+    var $table = $editor.data('cfw.table').$element;
+    var $active = $editor.data('cfw.table').$active;
+    $table.one('afterHideEditor.cfw.table', function() {
+            $control.CAST_STT('dispose');
+        });
+
+    $editor
+        .off('blur.cfw.table')
+        .on('keydown.cfw.tablestt', function(e) {
+            if (e.shiftKey && e.which == 9) {
+                $editor.CFW_Table('saveActiveEditor');
+            } else if (e.which == 9) {
+                $control.trigger('focus');
+                e.stopPropagation();
+                e.preventDefault();
+                return false;
+            } else if (/(13|27)/.test(e.which)) {
+                // Force save/remove since we disabled the blur above
+                $editor.CFW_Table('saveActiveEditor');
+            }
+        });
+
+    var pos = $editor.offset();
+    $control
+        .css('top', pos.top)
+        .css('left', pos.left + $editor.innerWidth() - $control.width())
+        .on('keydown.cfw.tablestt', function(e) {
+            if (e.shiftKey && e.which == 9) {
+                e.stopPropagation();
+                e.preventDefault();
+                $editor.trigger('focus');
+                return false;
+            } else if (e.which == 9) {
+                $editor.CFW_Table('saveActiveEditor');
+                var evt = $.Event("keydown");
+                evt.which = 9;
+                $active
+                    .trigger('focus')
+                    .trigger(evt);
+            } else if (e.which == 27) {
+                var evt = $.Event("keydown");
+                evt.which = 27;
+                $editor
+                    .trigger('focus')
+                    .trigger(evt);
+            };
+        });
+}
+
+// Auto hook STT on show of editor input
+$(function() {
+    $(document.body).on('afterShowEditor.cfw.table', function(e) {
+        var $editor = $(e.editor);
+        var props = ['top', 'left'];
+        var $control = $('<a href="#" role="button" class="stt-start stt-editor"><span class="fa fa-microphone" aria-hidden="true"></span><span class="sr-only">Use Speech to Text</span></a>')
+
+        $control
+            .insertAfter($editor)
+            .on('init.cast.stt', function() {
+                editorSTT($editor, $control);
+            })
+            .CAST_STT({
+                target: $editor
+            });
+    });
+});
+</script>
+
+</div> <!-- /.container -->
+
+</body>
+</html>
