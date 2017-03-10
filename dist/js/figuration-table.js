@@ -547,38 +547,10 @@ if (typeof jQuery === 'undefined') {
 
             this.$editor
                 .on('blur.cfw.table', function() {
-                    $selfRef.saveActiveEditor();
+                    $selfRef.editorSave();
                 })
                 .on('keydown.cfw.table', function(e) {
-                    // `focus` change event will trigger `blur` event handler
-
-                    // 37-left, 38-up, 39-right, 40-down
-                    if (/(37|38|39|40)/.test(e.which)) {
-                        // Allow for arrow key movement without changing cell
-                        e.stopPropagation();
-                        return;
-                    }
-
-                    // 9-tab, 13-enter, 27-esc
-                    if (!/(9|13|27)/.test(e.which)) { return; }
-
-                    if (e.which == 9) { // Tab - use new value
-                        $selfRef.$active.trigger('focus');
-                        // Pass through the tab keypress
-                        return;
-                    }
-
-                    if (e.which == 13) { // Enter - use new value
-                        e.stopPropagation();
-                        e.preventDefault();
-                        $selfRef.$active.trigger('focus');
-                    }
-                    if (e.which == 27) { // Esc - use original value
-                        e.stopPropagation();
-                        e.preventDefault();
-                        $selfRef.$editor.val($selfRef.$active.text());
-                        $selfRef.$active.trigger('focus');
-                    }
+                    $selfRef.editorKeydown(e);
                 })
                 .on('input.cfw.table paste.cfw.table', function() {
                     var evt = $.Event('validate.cfw.table');
@@ -615,9 +587,41 @@ if (typeof jQuery === 'undefined') {
             this.$element.CFW_trigger('afterHideEditor.cfw.table');
         },
 
-        saveActiveEditor : function() {
+        editorSave : function() {
             this._setActiveValue();
             this._editorRemove();
+        },
+
+        editorKeydown : function(e) {
+            // `focus` change event will trigger `blur` event handler
+
+            // 37-left, 38-up, 39-right, 40-down
+            if (/(37|38|39|40)/.test(e.which)) {
+                // Allow for arrow key movement without changing cell
+                e.stopPropagation();
+                return;
+            }
+
+            // 9-tab, 13-enter, 27-esc
+            if (!/(9|13|27)/.test(e.which)) { return; }
+
+            if (e.which == 9) { // Tab - use new value
+                this.$active.trigger('focus');
+                // Pass through the tab keypress
+                return;
+            }
+
+            if (e.which == 13) { // Enter - use new value
+                e.stopPropagation();
+                e.preventDefault();
+                this.$active.trigger('focus');
+            }
+            if (e.which == 27) { // Esc - use original value
+                e.stopPropagation();
+                e.preventDefault();
+                this.$editor.val(this.$active.text());
+                this.$active.trigger('focus');
+            }
         },
 
         _setActiveValue : function() {
