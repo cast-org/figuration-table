@@ -20,7 +20,8 @@
 <!-- STT -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
 <link rel="stylesheet" href="https://mbrambilla.github.io/cast-stt/css/stt.css">
-<script src="https://mbrambilla.github.io/cast-stt/js/stt.js"></script>
+<!-- <script src="https://mbrambilla.github.io/cast-stt/js/stt.js"></script> -->
+<script src="/cast-stt/master/js/stt.js"></script>
 
 <style>
 .stt-wrapper {
@@ -104,7 +105,7 @@ function outputJson(id) {
 
 // Speech-to-text integration
 
-function editorSTT($editor, $control) {
+function editorSTT($editor, $control, $wrapper) {
     // 9-tab, 13-enter, 27-esc
 
     function controlPosistion() {
@@ -117,6 +118,7 @@ function editorSTT($editor, $control) {
     var $active = $editor.data('cfw.table').$active;
 
     $editor
+        //.off('keydown.cfw.table')
         .on('keydown.cfw.tablestt', function(e) {
             if (e.shiftKey && e.which == 9) {
                 $editor.CFW_Table('editorSave');
@@ -186,21 +188,16 @@ $(function() {
         // Get the actual wrapper DOM node
         $wrapper = $editor.closest('.stt-wrapper');
         $wrapper
-            .on('focusout.cfw.tablestt', function() {
-                $editor.CFW_Table('editorSave');
+            .on('focusout.cfw.tablestt', function(e) {
+                if (!$wrapper.has(e.relatedTarget).length) {
+                    $editor.CFW_Table('editorSave');
+                }
             });
 
         $control
             .insertAfter($editor)
             .on('init.cast.stt', function() {
-                editorSTT($editor, $control);
-                $wrapper
-                    .off('focusout.cfw.tablestt')
-                    .on('focusout.cfw.tablestt', function(e) {
-                        if (!$wrapper.has(e.target).length) {
-                            $editor.CFW_Table('editorSave');
-                        }
-                    });
+                editorSTT($editor, $control, $wrapper);
             })
             .CAST_STT({
                 target: $editor
