@@ -114,7 +114,6 @@ function editorSTT($editor, $control) {
             .css('left', pos.left + $editor.innerWidth() - $control.width())
     }
 
-
     var $active = $editor.data('cfw.table').$active;
 
     $editor
@@ -195,6 +194,13 @@ $(function() {
             .insertAfter($editor)
             .on('init.cast.stt', function() {
                 editorSTT($editor, $control);
+                $wrapper
+                    .off('focusout.cfw.tablestt')
+                    .on('focusout.cfw.tablestt', function(e) {
+                        if (!$wrapper.has(e.target).length) {
+                            $editor.CFW_Table('editorSave');
+                        }
+                    });
             })
             .CAST_STT({
                 target: $editor
