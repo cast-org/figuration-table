@@ -114,49 +114,59 @@ function editorSTT($editor, $control, $wrapper) {
             .css('left', pos.left + $editor.innerWidth() - $control.width())
     }
 
+    function emulateTab(hasShift) {
+        var evt = $.Event("keydown");
+            evt.which = 9;
+            evt.shiftKey = hasShift;
+            $active
+                .trigger('focus')
+                .trigger(evt);
+    }
+
+    controlPosistion();
+    $(window).on('resize.' + $control.attr('id'), controlPosistion);
+
     var $active = $editor.data('cfw.table').$active;
 
     $editor
-        //.off('keydown.cfw.table')
+        .off('keydown.cfw.table')
         .on('keydown.cfw.tablestt', function(e) {
-            if (e.shiftKey && e.which == 9) {
-                $editor.CFW_Table('editorSave');
-            } else if (e.which == 9) {
-                $control.trigger('focus');
-                e.stopPropagation();
-                e.preventDefault();
-                return false;
-            } else if (/(13|27)/.test(e.which)) {
-                // Force save/remove since we disabled the blur above
-                $editor.CFW_Table('editorSave');
+            switch(e.which) {
+                case 9: { // tab
+                    if (e.shiftKey) {
+                        //$editor.CFW_Table('editorSave');
+                        emulateTab(true);
+                    } else {
+                        $control.trigger('focus');
+                        e.stopPropagation();
+                        e.preventDefault();
+                        return false;
+                    }
+                    break;
+                }
+                case 13: { // enter
+                    $editor.CFW_Table('editorSave');
+                    break;
+                }
             }
         });
 
     $control
         .on('keydown.cfw.tablestt', function(e) {
-            if (e.shiftKey && e.which == 9) {
-                e.stopPropagation();
-                e.preventDefault();
-                $editor.trigger('focus');
-                return false;
-            } else if (e.which == 9) {
-                $editor.CFW_Table('editorSave');
-                var evt = $.Event("keydown");
-                evt.which = 9;
-                $active
-                    .trigger('focus')
-                    .trigger(evt);
-            } else if (e.which == 27) {
-                var evt = $.Event("keydown");
-                evt.which = 27;
-                $editor
-                    .trigger('focus')
-                    .trigger(evt);
-            };
+            if (e.which == 9) { // tab
+                if (!e.shiftKey) {
+                    emulateTab(false);
+                }
+            }
         });
 
-    controlPosistion();
-    $(window).on('resize.' + $control.attr('id'), controlPosistion);
+    $wrapper
+        .on('keydown.cfw.tablestt', function(e) {
+            if (e.which == 27) { //esc
+                $editor.CFW_Table('editorCancel');
+                $active.trigger('focus');
+            }
+        });
 }
 
 // Auto hook STT on show of editor input
@@ -188,6 +198,7 @@ $(function() {
         $wrapper = $editor.closest('.stt-wrapper');
         $wrapper
             .on('focusout.cfw.tablestt', function(e) {
+                if (e.preventDefault()) { return; }
                 if (!$wrapper.has(e.relatedTarget).length) {
                     $editor.CFW_Table('editorSave');
                 }
