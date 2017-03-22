@@ -146,6 +146,7 @@ function editorSTT($editor, $control, $wrapper) {
                 }
                 case 13: { // enter
                     $editor.CFW_Table('editorSave');
+                    $active.trigger('focus');
                     break;
                 }
             }
