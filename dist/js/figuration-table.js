@@ -467,27 +467,23 @@ if (typeof jQuery === 'undefined') {
         },
 
         _actionKeydown : function(e) {
-            // For later reference:
-            // 27-esc, 32-space, 33-pgup, 34-pgdn, 35-end, 36-home
-
-            // 13-enter, 37-left, 38-up, 39-right, 40-down
-            if (!/(13|37|38|39|40)/.test(e.which)) { return; }
-
-            e.stopPropagation();
-            e.preventDefault();
-
             if (e.which == 13) { // Enter
+                e.stopPropagation();
+                e.preventDefault();
                 this._showEditor();
                 return;
             }
 
-            var $keyTarget = this._actionMove(e);
-            if ($keyTarget && $keyTarget.length > 0) {
-                $keyTarget.focus();
-            }
+            this._actionMove(e);
         },
 
         _actionMove : function(e) {
+            // 37-left, 38-up, 39-right, 40-down
+            if (!/(37|38|39|40)/.test(e.which)) { return; }
+
+            e.stopPropagation();
+            e.preventDefault();
+
             // Keyboard navigation via arrow keys
             var $node = $(e.target);
 
@@ -505,8 +501,8 @@ if (typeof jQuery === 'undefined') {
 
                 for (var i = 0; i < count; i++) {
                     if ($rows.eq(i).is($parent)) {
-                        $prevRow = i > 0     ? $rows.eq(i - 1) : null;
-                        $nextRow = i < count ? $rows.eq(i + 1) : null;
+                        $prevRow = i > 0     ? $rows.eq(i - 1) : $prevRow;
+                        $nextRow = i < count ? $rows.eq(i + 1) : $nextRow;
                         break;
                     }
                 }
@@ -518,11 +514,16 @@ if (typeof jQuery === 'undefined') {
                 }
             }
 
+            var $keyTarget = null;
             switch (e.which) {
-                /* Left  */ case 37: { return $node.prev(selectorCells).find('[tabindex=0]').addBack().filter('[tabindex=0]').first(); }
-                /* Up    */ case 38: { return $prevRow.children().eq($node.index()).find('[tabindex=0]').addBack().filter('[tabindex=0]').first(); }
-                /* Right */ case 39: { return $node.next(selectorCells).find('[tabindex=0]').addBack().filter('[tabindex=0]').first(); }
-                /* Down  */ case 40: { return $nextRow.children().eq($node.index()).find('[tabindex=0]').addBack().filter('[tabindex=0]').first(); }
+                /* Left  */ case 37: { $keyTarget = $node.prev(selectorCells).find('[tabindex=0]').addBack().filter('[tabindex=0]').first(); break; }
+                /* Up    */ case 38: { $keyTarget = $prevRow.children().eq($node.index()).find('[tabindex=0]').addBack().filter('[tabindex=0]').first(); break; }
+                /* Right */ case 39: { $keyTarget = $node.next(selectorCells).find('[tabindex=0]').addBack().filter('[tabindex=0]').first(); break; }
+                /* Down  */ case 40: { $keyTarget = $nextRow.children().eq($node.index()).find('[tabindex=0]').addBack().filter('[tabindex=0]').first(); break; }
+            }
+
+            if ($keyTarget && $keyTarget.length > 0) {
+                $keyTarget.focus();
             }
         },
 
@@ -739,10 +740,6 @@ if (typeof jQuery === 'undefined') {
                 });
             }
 
-            if (!this.settings.coledit) {
-                $heads.attr('tabindex', -1);
-            }
-
             if (this.$sorter !== null) {
                 var iconName = 'sort-' + ascString;
                 this.$sorter
@@ -756,9 +753,6 @@ if (typeof jQuery === 'undefined') {
         sortEnable : function() {
             var $selfRef = this;
 
-            // if (this.settings.coledit) {
-            //     this.colEditDisable();
-            // }
             this.settings.sortable = true;
 
             this.$element
@@ -768,24 +762,16 @@ if (typeof jQuery === 'undefined') {
                     var index = $(e.target).closest($selfRef.selectors.headCells).index();
                     $selfRef._sortSimple(index);
                 })
-                .off('keydown.cfw.table', this.selectors.headCols)
-                .on('keydown.cfw.table', this.selectors.headCols, function(e) {
-                    // 13-enter, 37-left, 38-up, 39-right, 40-down
-                    if (!/(13|37|38|39|40)/.test(e.which)) { return; }
-
-                    e.stopPropagation();
-                    e.preventDefault();
-
+                .off('keydown.cfw.table', this.selectors.headSort)
+                .on('keydown.cfw.table', this.selectors.headSort, function(e) {
                     if (e.which == 13) { // Enter
+                        e.stopPropagation();
+                        e.preventDefault();
                         var index = $(e.target).closest($selfRef.selectors.headCells).index();
                         $selfRef._sortSimple(index);
                         return;
                     }
-
-                    var $keyTarget = $selfRef._actionMove(e);
-                    if ($keyTarget && $keyTarget.length > 0) {
-                        $keyTarget.focus();
-                    }
+                    $selfRef._actionMove(e);
                 })
                 .addClass('sortable');
             this._sortUpdate();
@@ -795,9 +781,10 @@ if (typeof jQuery === 'undefined') {
             this.settings.sortable = false;
             this.$element
                 .off('click.cfw.table', this.selectors.headSort)
-                .off('keydown.cfw.table', this.selectors.headCols)
+                .off('keydown.cfw.table', this.selectors.headSort)
                 .removeClass('sortable');
             this.$sorter = null;
+            this.$element.find(this.selectors.headSort).remove();
             this._sortUpdate();
         },
 
