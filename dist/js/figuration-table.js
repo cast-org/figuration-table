@@ -575,6 +575,8 @@ if (typeof jQuery === 'undefined') {
         },
 
         _editorRemove : function() {
+            if (this.$editor == null) { return; }
+
             if (!this.$element.CFW_trigger('beforeHideEditor.cfw.table', { editor: this.$editor[0] })) {
                 return;
             }
@@ -590,6 +592,10 @@ if (typeof jQuery === 'undefined') {
         editorSave : function() {
             this._setActiveValue();
             this._editorRemove();
+        },
+
+        editorCancel : function() {
+            this.$editor.val(this.$active.text());
         },
 
         editorKeydown : function(e) {
@@ -619,12 +625,14 @@ if (typeof jQuery === 'undefined') {
             if (e.which == 27) { // Esc - use original value
                 e.stopPropagation();
                 e.preventDefault();
-                this.$editor.val(this.$active.text());
+                this.editorCancel();
                 this.$active.trigger('focus');
             }
         },
 
         _setActiveValue : function() {
+            if (this.$editor == null) { return; }
+
             var newVal = this.$editor.val();
             var origVal = this.$active.html();
 
